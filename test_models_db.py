@@ -20,7 +20,6 @@ from models import (
     Item,
     RentalRequest,
     Payment,
-    Media,
     Notification,
     Feedback,
 )
@@ -54,7 +53,6 @@ def test_tables_exist():
         "payments",
         "items",
         "rental_requests",
-        "media",
         "notifications",
         "feedback",
     }
@@ -83,9 +81,6 @@ def test_models_query():
 
         payments = session.query(Payment).limit(5).all()
         print("OK: Payment", len(payments), "rows")
-
-        media = session.query(Media).limit(5).all()
-        print("OK: Media", len(media), "rows")
 
         notifications = session.query(Notification).limit(5).all()
         print("OK: Notification", len(notifications), "rows")
