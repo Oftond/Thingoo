@@ -89,3 +89,13 @@
   object-fit: cover;
   display: block;
 }
+
+.gallery-loading,
+.gallery-error {
+  font-size: 14px;
+  color: #555555;
+}
+
+.gallery-error {
+  color: #b91c1c;
+}
