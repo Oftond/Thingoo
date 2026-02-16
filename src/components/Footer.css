@@ -1,0 +1,41 @@
+.footer {
+  background-color: #004225;
+  color: #ffffff;
+  padding: 28px 0;
+}
+
+.footer-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+}
+
+.footer-left {
+    font-family: "Markazi Text", serif;
+  font-weight: 700;
+   font-size: 45px;
+   color: #32D992;
+}
+
+.footer-right {
+  display: flex;
+  gap: 16px;       
+  font-size: 22px; 
+}
+
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+  font-size: 16px;
+  color: #32D992;
+}
+
+.footer-social {
+  display: flex;
+  gap: 12px;
+  font-size: 18px;
+}
