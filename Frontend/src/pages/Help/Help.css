@@ -1,0 +1,100 @@
+/* src/pages/Help/Help.css */
+.help-page {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  padding: 40px 20px;
+}
+
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: 40px;
+}
+
+.page-header h1 {
+  color: #004225;
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.help-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+}
+
+.help-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.help-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.help-card h3 {
+  color: #004225;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.faq-list,
+.article-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.faq-list li,
+.article-list li {
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+  color: #666;
+  font-size: 15px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.faq-list li:hover,
+.article-list li:hover {
+  color: #004225;
+}
+
+.faq-list li:last-child,
+.article-list li:last-child {
+  border-bottom: none;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contact-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.contact-item:last-child {
+  border-bottom: none;
+}
+
+.contact-label {
+  color: #666;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.contact-value {
+  color: #333;
+  font-size: 15px;
+}
