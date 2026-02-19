@@ -75,3 +75,28 @@ class PaymentStatus(BaseModel):
     class Config:
         from_attributes = True
 
+
+# ---------- Notifications ----------
+
+
+class NotificationBase(BaseModel):
+    user_id: UUID
+    type: Optional[str] = Field(default=None, description="Тип уведомления")
+    message: Optional[str] = Field(default=None, description="Текст уведомления")
+
+
+class NotificationRead(NotificationBase):
+    id: UUID
+    sent: Optional[bool]
+    created_at: Optional[datetime]
+
+    class Config:
+        from_attributes = True
+
+
+class NotificationReadStatus(BaseModel):
+    id: UUID
+    sent: Optional[bool]
+
+    class Config:
+        from_attributes = True
