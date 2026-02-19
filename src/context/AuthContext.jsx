@@ -6,16 +6,13 @@ const AuthContext = createContext(null);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
+  if (!context) throw new Error('useAuth must be used within AuthProvider');
   return context;
 };
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     checkAuth();
@@ -39,7 +36,6 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      setError(null);
       const response = await authAPI.login(credentials);
       const { token, user } = response.data;
       
@@ -49,14 +45,15 @@ export const AuthProvider = ({ children }) => {
       
       return { success: true };
     } catch (error) {
-      setError(error.response?.data?.message || 'Ошибка входа');
-      return { success: false, error: error.response?.data?.message };
+      return { 
+        success: false, 
+        error: error.response?.data?.message || 'Ошибка входа' 
+      };
     }
   };
 
   const register = async (userData) => {
     try {
-      setError(null);
       const response = await authAPI.register(userData);
       const { token, user } = response.data;
       
@@ -66,8 +63,10 @@ export const AuthProvider = ({ children }) => {
       
       return { success: true };
     } catch (error) {
-      setError(error.response?.data?.message || 'Ошибка регистрации');
-      return { success: false, error: error.response?.data?.message };
+      return { 
+        success: false, 
+        error: error.response?.data?.message || 'Ошибка регистрации' 
+      };
     }
   };
 
@@ -79,25 +78,34 @@ export const AuthProvider = ({ children }) => {
 
   const updateUser = async (userData) => {
     try {
-      setError(null);
       const response = await usersAPI.update(user.id, userData);
       setUser(response.data);
       return { success: true };
     } catch (error) {
-      setError(error.response?.data?.message || 'Ошибка обновления');
-      return { success: false, error: error.response?.data?.message };
+      return { 
+        success: false, 
+        error: error.response?.data?.message || 'Ошибка обновления' 
+      };
     }
   };
 
-  const value = {
-    user,
-    loading,
-    error,
-    login,
-    register,
-    logout,
-    updateUser,
+  // Проверка на админа
+  const isAdmin = () => {
+    return user?.role === 'admin';
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{
+      user,
+      loading,
+      login,
+      register,
+      logout,
+      updateUser,
+      isAdmin: isAdmin(),
+      isAuthenticated: !!user
+    }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };

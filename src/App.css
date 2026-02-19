@@ -1,4 +1,3 @@
-/* src/App.css - обновленный с добавлением стилей для 404 */
 :root {
   --color-bg: #f5f7fa;
   --color-surface: #ffffff;
@@ -7,11 +6,9 @@
   --color-border: #e2e8f0;
   --color-text-main: #1e293b;
   --color-text-muted: #64748b;
-
   --radius-lg: 24px;
   --radius-md: 16px;
   --radius-pill: 999px;
-
   --shadow-soft: 0 4px 16px rgba(10, 61, 44, 0.08);
 }
 
@@ -66,7 +63,6 @@ body {
   padding: 28px;
 }
 
-/* Кнопки */
 .btn {
   padding: 12px 28px;
   border-radius: var(--radius-pill);
@@ -116,7 +112,6 @@ body {
   cursor: not-allowed;
 }
 
-/* Тэги / бейджи */
 .tag {
   display: inline-flex;
   align-items: center;
@@ -130,7 +125,6 @@ body {
   white-space: nowrap;
 }
 
-/* Стили для 404 страницы */
 .not-found {
   text-align: center;
   padding: 60px 20px;
@@ -154,40 +148,17 @@ body {
   margin-bottom: 40px;
 }
 
-/* Адаптив */
-@media (max-width: 768px) {
-  .container {
-    padding: 0 16px;
-  }
-
-  .page {
-    padding: 32px 0;
-  }
-
-  .page-title {
-    font-size: 28px;
-  }
-
-  .not-found h1 {
-    font-size: 80px;
-  }
-
-  .not-found p {
-    font-size: 18px;
-  }
-
-  .btn {
-    padding: 10px 20px;
-    font-size: 14px;
-  }
+.loading {
+  text-align: center;
+  padding: 60px;
+  font-size: 18px;
+  color: var(--color-text-muted);
 }
 
-@media (max-width: 480px) {
-  .page-title {
-    font-size: 24px;
-  }
-
-  .not-found h1 {
-    font-size: 60px;
-  }
+@media (max-width: 768px) {
+  .container { padding: 0 16px; }
+  .page { padding: 32px 0; }
+  .page-title { font-size: 28px; }
+  .not-found h1 { font-size: 80px; }
+  .btn { padding: 10px 20px; font-size: 14px; }
 }

@@ -1,113 +1,51 @@
-// src/App.jsx - ПОЛНОСТЬЮ ИСПРАВЛЕННЫЙ
+// src/App.jsx - ОБНОВЛЕННЫЙ
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { ToastProvider } from './components/Toast/Toast';
+import ProtectedRoute from './components/ProtectedRoute';
+import AdminRoute from './components/AdminRoute';
+import ManagerRoute from './components/ManagerRoute';
+import AnimatedBackground from './components/Background/AnimatedBackground';
 import './App.css';
 
-// Импорт Layout
+// Layout
 import Layout from './components/Layout/Layout';
 
-// Импорт страниц
+// Публичные страницы
 import Home from './pages/Home/Home';
 import CatalogPage from './pages/CatalogPage/CatalogPage';
-import CreateListingPage from './pages/CreateListing/CreateListingPage';
 import ListingDetailPage from './pages/ListingDetail/ListingDetailPage';
+import Help from './pages/Help/Help';
+import AboutUs from './pages/AboutUs/AboutUs';
+import HowItWorks from './pages/HowItWorks/HowItWorks';
+
+// Защищенные страницы
+import CreateListingPage from './pages/CreateListing/CreateListingPage';
 import MyListings from './pages/MyListings/MyListings';
 import Profile from './pages/Profile/Profile';
 import Settings from './pages/Settings/Settings';
-import Help from './pages/Help/Help';
-import AboutUs from './pages/AboutUs/AboutUs';
 
-// Страницы-заглушки
-const Insurance = () => (
-  <div className="page">
-    <div className="container">
-      <h1 className="page-title">Страхование и залог</h1>
-      <p className="page-subtitle">Страница в разработке.</p>
-    </div>
-  </div>
-);
+// Страницы оплаты
+import PaymentPage from './pages/Payment/PaymentPage';
+import PaymentSuccess from './pages/Payment/PaymentSuccess';
 
-const Contacts = () => (
-  <div className="page">
-    <div className="container">
-      <h1 className="page-title">Контакты</h1>
-      <p className="page-subtitle">Страница в разработке.</p>
-    </div>
-  </div>
-);
+// Админ-страницы
+import AdminDashboard from './pages/Admin/AdminDashboard';
+import UsersList from './pages/Admin/UsersList';
 
-const News = () => (
-  <div className="page">
-    <div className="container">
-      <h1 className="page-title">Новости</h1>
-      <p className="page-subtitle">Страница в разработке.</p>
-    </div>
-  </div>
-);
-
-const Career = () => (
-  <div className="page">
-    <div className="container">
-      <h1 className="page-title">Карьера</h1>
-      <p className="page-subtitle">Страница в разработке.</p>
-    </div>
-  </div>
-);
-
-const Blog = () => (
-  <div className="page">
-    <div className="container">
-      <h1 className="page-title">Блог</h1>
-      <p className="page-subtitle">Страница в разработке.</p>
-    </div>
-  </div>
-);
-
-const Rules = () => (
-  <div className="page">
-    <div className="container">
-      <h1 className="page-title">Правила сервиса</h1>
-      <p className="page-subtitle">Страница в разработке.</p>
-    </div>
-  </div>
-);
-
-const FAQ = () => (
-  <div className="page">
-    <div className="container">
-      <h1 className="page-title">FAQ</h1>
-      <p className="page-subtitle">Страница в разработке.</p>
-    </div>
-  </div>
-);
-
-const Privacy = () => (
-  <div className="page">
-    <div className="container">
-      <h1 className="page-title">Политика конфиденциальности</h1>
-      <p className="page-subtitle">Страница в разработке.</p>
-    </div>
-  </div>
-);
-
-const Terms = () => (
-  <div className="page">
-    <div className="container">
-      <h1 className="page-title">Пользовательское соглашение</h1>
-      <p className="page-subtitle">Страница в разработке.</p>
-    </div>
-  </div>
-);
+// Менеджер-страницы
+import ManagerDashboard from './pages/Manager/ManagerDashboard';
+import ModeratorQueue from './pages/Manager/ModeratorQueue';
 
 const NotFound = () => (
   <div className="page">
     <div className="container">
       <div className="not-found">
-        <h1 className="page-title">404</h1>
-        <p className="page-subtitle">Страница не найдена</p>
+        <h1>404</h1>
+        <p>Страница не найдена</p>
         <button className="btn btn-primary" onClick={() => window.location.href = '/'}>
-          Вернуться на главную
+          На главную
         </button>
       </div>
     </div>
@@ -118,34 +56,83 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<CatalogPage />} />
-            <Route path="home" element={<Home />} />
-            <Route path="catalog" element={<CatalogPage />} />
-            {/* ВАЖНО: этот маршрут должен быть здесь */}
-            <Route path="create-listing" element={<CreateListingPage />} />
-            <Route path="listing/:id" element={<ListingDetailPage />} />
-            <Route path="my-listings" element={<MyListings />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="settings" element={<Settings />} />
-            <Route path="help" element={<Help />} />
-            <Route path="about" element={<AboutUs />} />
-            
-            {/* Страницы из футера */}
-            <Route path="insurance" element={<Insurance />} />
-            <Route path="contacts" element={<Contacts />} />
-            <Route path="news" element={<News />} />
-            <Route path="career" element={<Career />} />
-            <Route path="blog" element={<Blog />} />
-            <Route path="rules" element={<Rules />} />
-            <Route path="faq" element={<FAQ />} />
-            <Route path="privacy" element={<Privacy />} />
-            <Route path="terms" element={<Terms />} />
-            
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
+        <ToastProvider>
+          <AnimatedBackground />
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              {/* Главная страница */}
+              <Route index element={<Home />} />
+              
+              {/* Публичные маршруты */}
+              <Route path="catalog" element={<CatalogPage />} />
+              <Route path="listing/:id" element={<ListingDetailPage />} />
+              <Route path="help" element={<Help />} />
+              <Route path="about" element={<AboutUs />} />
+              <Route path="how-it-works" element={<HowItWorks />} />
+              
+              {/* Защищенные маршруты */}
+              <Route path="create-listing" element={
+                <ProtectedRoute>
+                  <CreateListingPage />
+                </ProtectedRoute>
+              } />
+              <Route path="my-listings" element={
+                <ProtectedRoute>
+                  <MyListings />
+                </ProtectedRoute>
+              } />
+              <Route path="profile" element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              } />
+              <Route path="settings" element={
+                <ProtectedRoute>
+                  <Settings />
+                </ProtectedRoute>
+              } />
+              
+              {/* Страницы оплаты */}
+              <Route path="payment/:id" element={
+                <ProtectedRoute>
+                  <PaymentPage />
+                </ProtectedRoute>
+              } />
+              <Route path="payment/success" element={
+                <ProtectedRoute>
+                  <PaymentSuccess />
+                </ProtectedRoute>
+              } />
+              
+              {/* Админ-маршруты */}
+              <Route path="admin" element={
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
+              } />
+              <Route path="admin/users" element={
+                <AdminRoute>
+                  <UsersList />
+                </AdminRoute>
+              } />
+              
+              {/* Менеджер-маршруты */}
+              <Route path="manager" element={
+                <ManagerRoute>
+                  <ManagerDashboard />
+                </ManagerRoute>
+              } />
+              <Route path="manager/moderate" element={
+                <ManagerRoute>
+                  <ModeratorQueue />
+                </ManagerRoute>
+              } />
+
+              {/* 404 */}
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>
+        </ToastProvider>
       </AuthProvider>
     </Router>
   );

@@ -33,7 +33,7 @@ function Home() {
           <div className="hero-buttons">
             <button 
               className="hero-btn hero-btn-primary"
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/catalog')}
             >
               Вперед к поискам
             </button>

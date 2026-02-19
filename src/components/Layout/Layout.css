@@ -1,4 +1,4 @@
-/* src/components/Layout/Layout.css - ПОЛНОСТЬЮ ОБНОВЛЕННЫЙ */
+/* src/components/Layout/Layout.css - Обновленная версия */
 * {
   margin: 0;
   padding: 0;
@@ -9,10 +9,6 @@ body {
   font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif;
   background-color: #ffffff;
   color: #1e293b;
-}
-
-body.light-theme {
-  background-color: #f8f9fa;
 }
 
 .layout {
@@ -28,7 +24,7 @@ body.light-theme {
   width: 100%;
 }
 
-/* Header с новым цветом текста */
+/* Header */
 .header {
   background-color: #0a3d2c;
   padding: 16px 0;
@@ -114,9 +110,7 @@ body.light-theme {
   align-items: center;
 }
 
-/* src/components/Layout/Layout.css - ОБНОВЛЕННЫЙ (только изменения кнопок) */
-
-/* Кнопки - ОБНОВЛЕННЫЕ */
+/* Кнопки */
 .btn {
   padding: 10px 24px;
   border-radius: 100px;
@@ -125,203 +119,160 @@ body.light-theme {
   cursor: pointer;
   border: none;
   transition: all 0.2s;
-  letter-spacing: 0.3px;
 }
 
-.btn-primary {
-  background-color: #ffffff;
-  color: #0a3d2c;
-  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
-}
-
-.btn-primary:hover {
-  background-color: #32D992;
-  color: #0a3d2c;
-  transform: none;
-  box-shadow: 0 8px 16px rgba(50, 217, 146, 0.3);
-}
-
-/* Кнопка регистрации (outline) */
 .btn-outline {
   background-color: transparent;
   color: #32D992;
   border: 1.5px solid #32D992;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 
 .btn-outline:hover {
   border-color: #ffffff;
   color: #ffffff;
   background-color: rgba(50, 217, 146, 0.1);
-  transform: none;
 }
 
-/* Кнопка Войти - теперь такая же как btn-outline */
 .btn-login {
   background-color: transparent;
   color: #32D992;
   border: 1.5px solid #32D992;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 
 .btn-login:hover {
   border-color: #ffffff;
   color: #ffffff;
   background-color: rgba(50, 217, 146, 0.1);
-  transform: none;
 }
 
-.theme-toggle {
-  background: none;
-  border: none;
+.user-name {
   color: #32D992;
-  font-size: 20px;
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
-  border-radius: 999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s;
+  font-weight: 500;
 }
 
-.theme-toggle:hover {
-  background-color: rgba(50, 217, 146, 0.1);
-}
-
+/* Sidebar overlay */
 .sidebar-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background-color: rgba(10, 61, 44, 0.5);
   z-index: 90;
   cursor: pointer;
   backdrop-filter: blur(4px);
 }
 
+/* Main content */
 .main-content {
   flex: 1;
   padding: 48px 0;
-  width: 100%;
   background-color: #ffffff;
 }
 
-/* Footer с новым цветом текста */
+/* Обновленный Footer */
 .footer {
   background-color: #0a3d2c;
-  padding: 60px 0 30px;
-  color: #32D992;
+  padding: 24px 0;
   margin-top: auto;
 }
 
 .footer-content {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr 1fr;
-  gap: 48px;
-  margin-bottom: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.footer-section .logo a {
+.footer-logo a {
   font-size: 26px;
+  font-weight: 700;
   color: #32D992;
   text-decoration: none;
-  margin-bottom: 16px;
-  display: inline-block;
-  font-weight: 700;
   letter-spacing: -0.5px;
   transition: color 0.2s;
 }
 
-.footer-section .logo a:hover {
+.footer-logo a:hover {
   color: #ffffff;
 }
 
-.footer-description {
-  color: rgba(50, 217, 146, 0.7);
-  margin-bottom: 0;
-  line-height: 1.7;
-  font-size: 15px;
-  max-width: 300px;
-}
-
-.footer-section h4 {
-  color: #32D992;
-  margin-bottom: 24px;
-  font-size: 18px;
-  font-weight: 600;
-}
-
 .footer-links {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.footer-links li {
-  margin-bottom: 14px;
+  display: flex;
+  gap: 32px;
 }
 
 .footer-links button {
   background: none;
   border: none;
-  padding: 0;
-  color: rgba(50, 217, 146, 0.7);
-  text-decoration: none;
+  color: #32D992;
+  font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
-  transition: color 0.2s, transform 0.2s;
-  font-size: 15px;
-  display: inline-block;
+  transition: color 0.2s;
+  text-transform: lowercase;
+}
+
+.footer-links button:first-letter {
+  text-transform: uppercase;
 }
 
 .footer-links button:hover {
   color: #ffffff;
-  transform: translateX(4px);
 }
 
-.footer-bottom {
-  padding-top: 30px;
-  border-top: 1px solid rgba(50, 217, 146, 0.2);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
-}
+/* src/components/Layout/Layout.css - ДОПОЛНЕНИЯ */
 
-.footer-copyright {
-  color: rgba(50, 217, 146, 0.7);
-  font-size: 14px;
-}
-
-.footer-legal {
-  display: flex;
-  gap: 32px;
-}
-
-.footer-legal button {
+.user-name-btn {
   background: none;
   border: none;
-  color: rgba(50, 217, 146, 0.7);
-  text-decoration: none;
-  font-size: 14px;
   cursor: pointer;
-  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 100px;
+  transition: all 0.2s;
+  background-color: rgba(50, 217, 146, 0.1);
 }
 
-.footer-legal button:hover {
-  color: #ffffff;
+.user-name-btn:hover {
+  background-color: rgba(50, 217, 146, 0.2);
+  transform: translateY(-1px);
 }
 
+.user-name {
+  color: #32D992;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.admin-badge {
+  background-color: #8b5cf6;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Адаптив для футера */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+  
+  .footer-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+  }
+}
+
+/* Остальные медиа-запросы */
 @media (max-width: 1024px) {
   .header-nav {
     display: none;
-  }
-
-  .footer-content {
-    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -331,29 +282,6 @@ body.light-theme {
   }
 
   .header-left {
-    display: flex;
-    align-items: center;
     gap: 24px;
-  }
-
-  .footer-content {
-    grid-template-columns: 1fr;
-    gap: 32px;
-    text-align: center;
-  }
-
-  .footer-section .logo a,
-  .footer-description {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .footer-bottom {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .footer-legal {
-    justify-content: center;
   }
 }
