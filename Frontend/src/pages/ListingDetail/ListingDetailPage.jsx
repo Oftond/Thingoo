@@ -91,8 +91,8 @@ const ListingDetailPage = () => {
     alert(`Связаться с владельцем: ${listing.owner.name} — +7 999 123-45-67`);
   };
 
-  const handleBook = () => {
-    alert('Бронирование пока демонстрационное, здесь будет форма заявки.');
+  const handlePayment = () => {
+    navigate(`/payment/${id}`);
   };
 
   const toggleFavorite = () => {
@@ -215,12 +215,13 @@ const ListingDetailPage = () => {
                       <span className="price-amount">{listing.price} ₽</span>
                       <span className="price-period">в сутки</span>
                     </div>
+                    {/* Кнопка оплаты вместо бронирования */}
                     <button
                       type="button"
                       className="btn btn-primary"
-                      onClick={handleBook}
+                      onClick={handlePayment}
                     >
-                      Забронировать
+                      Оплатить
                     </button>
                   </div>
                 </div>
@@ -385,13 +386,25 @@ const ListingDetailPage = () => {
                   <span className="deposit-label">Залог</span>
                   <span className="deposit-amount">{listing.conditions.deposit}</span>
                 </div>
-
                 <button
                   type="button"
                   className="btn btn-primary btn-block"
-                  onClick={handleBook}
+                  onClick={handlePayment}
                 >
-                  Забронировать
+                  Оплатить
+                </button>
+
+                <button
+                  type="button"
+                  className="btn btn-outline"
+                  onClick={handleContact}
+                >
+                  <FaPhone />
+                  Связаться
+                </button>
+
+                <button className="btn btn-outline back-button" onClick={() => navigate(-1)}>
+                  ← Назад
                 </button>
               </div>
 

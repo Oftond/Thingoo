@@ -1,10 +1,10 @@
-// src/components/Layout/Layout.jsx - ИСПРАВЛЕННЫЙ
+// src/components/Layout/Layout.jsx
 import React, { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Sidebar from '../Sidebar/Sidebar';
-import LoginModal from '../LoginModal';
-import RegisterModal from '../RegisterModal';
+import LoginModal from '../Auth/LoginModal';
+import RegisterModal from '../Auth/RegisterModal';
 import './Layout.css';
 
 const Layout = () => {
@@ -88,14 +88,14 @@ const Layout = () => {
                 <button
                   type="button"
                   className="nav-link"
-                  onClick={() => navigate('/home')}
+                  onClick={() => navigate('/')}
                 >
                   Главная
                 </button>
                 <button
                   type="button"
                   className="nav-link"
-                  onClick={() => navigate('/')}
+                  onClick={() => navigate('/catalog')}
                 >
                   Каталог
                 </button>
@@ -111,21 +111,27 @@ const Layout = () => {
                   className="nav-link"
                   onClick={() => navigate('/about')}
                 >
-                  Как это работает
+                  О нас
                 </button>
                 <button
                   type="button"
                   className="nav-link"
-                  onClick={() => navigate('/about')}
+                  onClick={() => navigate('/how-it-works')}
                 >
-                  О нас
+                  Как работает
                 </button>
               </nav>
 
               <div className="header-actions">
                 {user ? (
                   <>
-                    <span className="user-name">{user.fullName || user.name}</span>
+                    <span className="user-name">
+                      {/* Безопасное отображение имени */}
+                      {typeof user?.full_name === 'string' ? user.full_name : 
+                      typeof user?.fullName === 'string' ? user.fullName : 
+                      typeof user?.email === 'string' ? user.email : 
+                      'Пользователь'}
+                    </span>
                     <button
                       type="button"
                       className="btn btn-outline"
@@ -136,7 +142,7 @@ const Layout = () => {
                     <button
                       type="button"
                       className="btn btn-login"
-                      onClick={handleLogout}
+                      onClick={logout}
                     >
                       Выйти
                     </button>
@@ -171,6 +177,7 @@ const Layout = () => {
         user={user}
         onLoginClick={openLoginModal}
         onRegisterClick={openRegisterModal}
+        onLogout={handleLogout}
       />
 
       {isSidebarOpen && (
@@ -196,50 +203,14 @@ const Layout = () => {
                   Thingoo
                 </a>
               </div>
-              <p className="footer-description">
-                Платформа для аренды вещей между людьми.
-              </p>
             </div>
 
             <div className="footer-section">
-              <h4>Сервис</h4>
               <ul className="footer-links">
-                <li><button onClick={() => handleNavigation('/home')}>Главная</button></li>
-                <li><button onClick={() => handleNavigation('/about')}>Как это работает</button></li>
-                <li><button onClick={() => handleNavigation('/insurance')}>Страхование</button></li>
-                <li><button onClick={() => handleNavigation('/help')}>Помощь</button></li>
-                <li><button onClick={() => handleNavigation('/contacts')}>Контакты</button></li>
-              </ul>
-            </div>
-
-            <div className="footer-section">
-              <h4>О компании</h4>
-              <ul className="footer-links">
+                <li><button onClick={() => handleNavigation('/how-it-works')}>Как это работает</button></li>
                 <li><button onClick={() => handleNavigation('/about')}>О нас</button></li>
-                <li><button onClick={() => handleNavigation('/news')}>Новости</button></li>
-                <li><button onClick={() => handleNavigation('/career')}>Карьера</button></li>
-                <li><button onClick={() => handleNavigation('/blog')}>Блог</button></li>
+                <li><button onClick={() => handleNavigation('/help')}>Помощь</button></li>
               </ul>
-            </div>
-
-            <div className="footer-section">
-              <h4>Правовая информация</h4>
-              <ul className="footer-links">
-                <li><button onClick={() => handleNavigation('/rules')}>Правила</button></li>
-                <li><button onClick={() => handleNavigation('/faq')}>FAQ</button></li>
-                <li><button onClick={() => handleNavigation('/privacy')}>Политика</button></li>
-                <li><button onClick={() => handleNavigation('/terms')}>Соглашение</button></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="footer-bottom">
-            <div className="footer-copyright">
-              © {new Date().getFullYear()} Thingoo
-            </div>
-            <div className="footer-legal">
-              <button onClick={() => handleNavigation('/privacy')}>Политика</button>
-              <button onClick={() => handleNavigation('/terms')}>Условия</button>
             </div>
           </div>
         </div>

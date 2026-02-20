@@ -1,4 +1,3 @@
-/* src/components/Modal.css - ДОПОЛНЕНИЯ */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -30,30 +29,12 @@
   box-shadow: 0 20px 40px rgba(15, 23, 42, 0.35);
   animation: modal-appear 0.2s ease-out;
   position: relative;
-  box-sizing: border-box;
   max-height: 90vh;
   overflow-y: auto;
 }
 
-/* Специальный класс для модалки регистрации (больше размер) */
 .modal-content.register-modal {
   max-width: 450px;
-}
-
-.modal-title {
-  margin: 0 0 8px;
-  font-size: 24px;
-  font-weight: 700;
-  color: #004225;
-  text-align: center;
-}
-
-.modal-subtitle {
-  margin: 0 0 20px;
-  font-size: 14px;
-  color: #6b7280;
-  text-align: center;
-  line-height: 1.5;
 }
 
 .modal-close {
@@ -81,6 +62,22 @@
   transform: rotate(90deg);
 }
 
+.modal-title {
+  margin: 0 0 8px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #004225;
+  text-align: center;
+}
+
+.modal-subtitle {
+  margin: 0 0 20px;
+  font-size: 14px;
+  color: #6b7280;
+  text-align: center;
+  line-height: 1.5;
+}
+
 .modal-field {
   margin-bottom: 16px;
 }
@@ -99,7 +96,6 @@
   border-radius: 10px;
   border: 1px solid #d1d5db;
   font-size: 15px;
-  box-sizing: border-box;
   transition: all 0.2s;
   background-color: #f9fafb;
 }
@@ -192,18 +188,15 @@
   text-align: center;
 }
 
-/* Адаптив для мобильных */
 @media (max-width: 480px) {
   .modal-content {
     max-width: 90%;
     padding: 20px;
   }
-
   .modal-passport-row {
     flex-direction: column;
     gap: 8px;
   }
-
   .modal-title {
     font-size: 22px;
   }

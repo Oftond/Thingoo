@@ -1,8 +1,9 @@
-// src/pages/CreateListing/CreateListingPage.jsx - ИСПРАВЛЕННЫЙ
+// src/pages/CreateListing/CreateListingPage.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { itemsAPI, mediaAPI } from '../../services/api';
+import { itemsAPI, mediaAPI } from '../../services/api'; // Эти импорты теперь работают
+import { useToast } from '../../components/Toast/Toast';
 import './CreateListingPage.css';
 
 const CreateListingPage = () => {
@@ -40,7 +41,6 @@ const CreateListingPage = () => {
     { id: 'other', name: 'Другое', icon: '✨' },
   ];
 
-  // Убираем автоматический редирект, вместо этого показываем сообщение
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {

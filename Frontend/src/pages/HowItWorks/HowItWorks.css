@@ -1,0 +1,151 @@
+/* src/pages/HowItWorks/HowItWorks.css */
+.how-it-works {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  padding: 60px 0;
+}
+
+.how-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.how-title {
+  font-size: 42px;
+  font-weight: 800;
+  color: #004225;
+  margin-bottom: 15px;
+  letter-spacing: -1px;
+}
+
+.how-subtitle {
+  font-size: 18px;
+  color: #64748b;
+}
+
+.how-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 60px;
+}
+
+.how-column {
+  background: white;
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: 0 4px 20px rgba(0, 66, 37, 0.08);
+  border: 1px solid #e2e8f0;
+}
+
+.column-title {
+  color: #004225;
+  font-size: 28px;
+  margin-bottom: 30px;
+  font-weight: 700;
+  text-align: center;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #32D992;
+}
+
+.steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.step-item {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.step-number {
+  width: 45px;
+  height: 45px;
+  background: linear-gradient(135deg, #004225, #32D992);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-content h3 {
+  color: #004225;
+  font-size: 18px;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.step-content p {
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.how-cta {
+  text-align: center;
+  padding: 50px;
+  background: linear-gradient(135deg, #004225 0%, #0f5a3a 100%);
+  border-radius: 24px;
+  color: white;
+}
+
+.how-cta h3 {
+  font-size: 28px;
+  margin-bottom: 25px;
+  font-weight: 700;
+}
+
+.how-cta .cta-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+@media (max-width: 1024px) {
+  .how-tabs {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .how-it-works {
+    padding: 40px 0;
+  }
+  
+  .how-title {
+    font-size: 32px;
+  }
+  
+  .how-column {
+    padding: 30px 20px;
+  }
+  
+  .column-title {
+    font-size: 24px;
+  }
+  
+  .step-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .how-cta .cta-buttons {
+    flex-direction: column;
+  }
+  
+  .how-cta {
+    padding: 30px 20px;
+  }
+}

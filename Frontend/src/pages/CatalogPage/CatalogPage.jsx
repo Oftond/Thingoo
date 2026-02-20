@@ -3,59 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CatalogPage.css';
 
-const CatalogPage = () => {
-  const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedRating, setSelectedRating] = useState('all');
-  const [selectedSort, setSelectedSort] = useState('popular');
-  const [priceRange, setPriceRange] = useState([0, 5000]);
-  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
-  const [showRatingDropdown, setShowRatingDropdown] = useState(false);
-  const [showSortDropdown, setShowSortDropdown] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const categories = [
-    { id: 'all', name: 'Все категории', icon: '📦' },
-    { id: 'electronics', name: 'Электроника', icon: '📱' },
-    { id: 'tools', name: 'Инструменты', icon: '🔧' },
-    { id: 'sports', name: 'Спорт и отдых', icon: '⚽' },
-    { id: 'clothing', name: 'Одежда', icon: '👕' },
-    { id: 'books', name: 'Книги', icon: '📚' },
-    { id: 'furniture', name: 'Мебель', icon: '🛋️' },
-    { id: 'vehicles', name: 'Транспорт', icon: '🚲' },
-    { id: 'photography', name: 'Фототехника', icon: '📷' },
-    { id: 'music', name: 'Музыка', icon: '🎵' },
-    { id: 'party', name: 'Для праздника', icon: '🎉' },
-    { id: 'camping', name: 'Кемпинг', icon: '⛺' },
-  ];
-  
-  const ratingFilters = [
-    { id: 'all', name: 'Любой рейтинг', min: 0 },
-    { id: '4.5', name: '4.5+ Отлично', min: 4.5 },
-    { id: '4.0', name: '4.0+ Хорошо', min: 4.0 },
-    { id: '3.5', name: '3.5+ Удовлетворительно', min: 3.5 },
-    { id: '3.0', name: '3.0+ и выше', min: 3.0 },
-  ];
-  
-  const sortOptions = [
-    { id: 'popular', name: 'Популярные' },
-    { id: 'rating', name: 'По рейтингу' },
-    { id: 'price-low', name: 'Цена: низкая → высокая' },
-    { id: 'price-high', name: 'Цена: высокая → низкая' },
-    { id: 'distance', name: 'Ближе всего' },
-    { id: 'newest', name: 'Сначала новые' },
-  ];
-  
-  const popularCategories = [
-    { id: 'electronics', name: 'Электроника', icon: '📱', count: 156, color: '#FF6B6B' },
-    { id: 'tools', name: 'Инструменты', icon: '🔧', count: 89, color: '#4ECDC4' },
-    { id: 'sports', name: 'Спорт и отдых', icon: '⚽', count: 124, color: '#FFD166' },
-    { id: 'photography', name: 'Фототехника', icon: '📷', count: 67, color: '#06D6A0' },
-    { id: 'party', name: 'Для праздника', icon: '🎉', count: 45, color: '#118AB2' },
-    { id: 'camping', name: 'Кемпинг', icon: '⛺', count: 78, color: '#EF476F' },
-  ];
-  
-  const listings = [
+const listings = [
     {
       id: 1,
       title: 'Камера Sony Alpha 7 III с объективом',
@@ -199,7 +147,7 @@ const CatalogPage = () => {
     {
       id: 11,
       title: 'Гитара акустическая Yamaha',
-      category: 'music',
+      category:'music',
       price: 400,
       rating: 4.4,
       reviews: 11,
@@ -225,6 +173,60 @@ const CatalogPage = () => {
       isNew: false,
     },
   ];
+
+const CatalogPage = () => {
+  const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedRating, setSelectedRating] = useState('all');
+  const [selectedSort, setSelectedSort] = useState('popular');
+  const [priceRange, setPriceRange] = useState([0, 5000]);
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+  const [showRatingDropdown, setShowRatingDropdown] = useState(false);
+  const [showSortDropdown, setShowSortDropdown] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const categories = [
+    { id: 'all', name: 'Все категории', icon: '📦' },
+    { id: 'electronics', name: 'Электроника', icon: '📱' },
+    { id: 'tools', name: 'Инструменты', icon: '🔧' },
+    { id: 'sports', name: 'Спорт и отдых', icon: '⚽' },
+    { id: 'clothing', name: 'Одежда', icon: '👕' },
+    { id: 'books', name: 'Книги', icon: '📚' },
+    { id: 'furniture', name: 'Мебель', icon: '🛋️' },
+    { id: 'vehicles', name: 'Транспорт', icon: '🚲' },
+    { id: 'photography', name: 'Фототехника', icon: '📷' },
+    { id: 'music', name: 'Музыка', icon: '🎵' },
+    { id: 'party', name: 'Для праздника', icon: '🎉' },
+    { id: 'camping', name: 'Кемпинг', icon: '⛺' },
+  ];
+  
+  const ratingFilters = [
+    { id: 'all', name: 'Любой рейтинг', min: 0 },
+    { id: '4.5', name: '4.5+ Отлично', min: 4.5 },
+    { id: '4.0', name: '4.0+ Хорошо', min: 4.0 },
+    { id: '3.5', name: '3.5+ Удовлетворительно', min: 3.5 },
+    { id: '3.0', name: '3.0+ и выше', min: 3.0 },
+  ];
+  
+  const sortOptions = [
+    { id: 'popular', name: 'Популярные' },
+    { id: 'rating', name: 'По рейтингу' },
+    { id: 'price-low', name: 'Цена: низкая → высокая' },
+    { id: 'price-high', name: 'Цена: высокая → низкая' },
+    { id: 'distance', name: 'Ближе всего' },
+    { id: 'newest', name: 'Сначала новые' },
+  ];
+  
+  const popularCategories = [
+    { id: 'electronics', name: 'Электроника', icon: '📱', count: 156, color: '#FF6B6B' },
+    { id: 'tools', name: 'Инструменты', icon: '🔧', count: 89, color: '#4ECDC4' },
+    { id: 'sports', name: 'Спорт и отдых', icon: '⚽', count: 124, color: '#FFD166' },
+    { id: 'photography', name: 'Фототехника', icon: '📷', count: 67, color: '#06D6A0' },
+    { id: 'party', name: 'Для праздника', icon: '🎉', count: 45, color: '#118AB2' },
+    { id: 'camping', name: 'Кемпинг', icon: '⛺', count: 78, color: '#EF476F' },
+  ];
+  
+
   
   const getCurrentCategory = () => {
     return categories.find(c => c.id === selectedCategory) || categories[0];

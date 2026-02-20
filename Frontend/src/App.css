@@ -1,18 +1,19 @@
-/* src/App.css - обновленный с добавлением стилей для 404 */
 :root {
   --color-bg: #f5f7fa;
   --color-surface: #ffffff;
   --color-primary: #0a3d2c;
+  --color-primary-dark: #005a30;
   --color-accent: #32D992;
   --color-border: #e2e8f0;
   --color-text-main: #1e293b;
   --color-text-muted: #64748b;
+  --color-danger: #ef4444;
+  --color-danger-dark: #dc2626;
 
   --radius-lg: 24px;
   --radius-md: 16px;
-  --radius-pill: 999px;
-
-  --shadow-soft: 0 4px 16px rgba(10, 61, 44, 0.08);
+  --radius-sm: 12px;
+  --radius-pill: 100px;
 }
 
 * {
@@ -29,7 +30,7 @@ body {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 24px;
   width: 100%;
@@ -61,12 +62,11 @@ body {
 .card {
   background-color: var(--color-surface);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-soft);
   border: 1px solid var(--color-border);
   padding: 28px;
 }
 
-/* Кнопки */
+/* ===== ЕДИНЫЙ СТИЛЬ ДЛЯ ВСЕХ КНОПОК ===== */
 .btn {
   padding: 12px 28px;
   border-radius: var(--radius-pill);
@@ -74,46 +74,196 @@ body {
   font-weight: 600;
   cursor: pointer;
   border: none;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   letter-spacing: 0.3px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  line-height: 1;
+  white-space: nowrap;
 }
 
-.btn-primary {
+.btn-primary,
+.btn-secondary,
+.btn-outline,
+.btn-login,
+.btn-register {
   background-color: var(--color-primary);
-  color: #ffffff;
+  color: var(--color-accent);
 }
 
-.btn-primary:hover:not(:disabled) {
-  background-color: #0f4d38;
-  box-shadow: 0 8px 20px rgba(10, 61, 44, 0.2);
+.btn-primary:hover:not(:disabled),
+.btn-secondary:hover:not(:disabled),
+.btn-outline:hover:not(:disabled),
+.btn-login:hover:not(:disabled),
+.btn-register:hover:not(:disabled) {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
 }
 
-.btn-outline {
-  background-color: transparent;
-  color: var(--color-primary);
-  border: 1.5px solid var(--color-primary);
+.btn-primary:active:not(:disabled),
+.btn-secondary:active:not(:disabled),
+.btn-outline:active:not(:disabled),
+.btn-login:active:not(:disabled),
+.btn-register:active:not(:disabled) {
+  transform: translateY(0);
 }
 
-.btn-outline:hover:not(:disabled) {
-  background-color: rgba(10, 61, 44, 0.05);
+.btn-danger {
+  background-color: var(--color-danger);
+  color: white;
 }
 
-.btn-secondary {
-  background-color: #f1f5f9;
-  color: var(--color-text-main);
+.btn-danger:hover:not(:disabled) {
+  background-color: var(--color-danger-dark);
+  transform: translateY(-2px);
 }
 
-.btn-secondary:hover:not(:disabled) {
-  background-color: #e2e8f0;
+.btn-logout {
+  background-color: var(--color-danger);
+  color: white;
+  border: none;
+  padding: 14px 20px;
+  font-size: 16px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-logout:hover:not(:disabled) {
+  background-color: var(--color-danger-dark);
+  transform: translateY(-2px);
+}
+
+.btn-small {
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+.btn-large {
+  padding: 16px 40px;
+  font-size: 18px;
+}
+
+.btn-block {
+  width: 100%;
 }
 
 .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
+}
+
+.modal-primary-btn,
+.modal-secondary-btn {
+  background-color: var(--color-primary);
+  color: var(--color-accent);
+  border: none;
+  padding: 14px 20px;
+  border-radius: var(--radius-pill);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.modal-primary-btn:hover:not(:disabled),
+.modal-secondary-btn:hover:not(:disabled) {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+}
+
+.btn-card,
+.btn-rent {
+  width: 100%;
+  padding: 14px;
+  background-color: var(--color-primary);
+  color: var(--color-accent);
+  border: none;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-card:hover,
+.btn-rent:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+}
+
+.filter-tab {
+  padding: 8px 20px;
+  border: none;
+  background-color: var(--color-primary);
+  color: var(--color-accent);
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-tab:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-1px);
+}
+
+.filter-tab.active {
+  background-color: var(--color-primary-dark);
+}
+
+.action-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  background-color: var(--color-primary);
+  color: var(--color-accent);
+}
+
+.action-btn:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+}
+
+.action-btn.block {
+  background-color: #fee2e2;
+  color: var(--color-danger);
+}
+
+.action-btn.block:hover {
+  background-color: #fecaca;
+}
+
+.action-btn.unblock {
+  background-color: #d1fae5;
+  color: #10b981;
+}
+
+.action-btn.unblock:hover {
+  background-color: #a7f3d0;
+}
+
+.action-btn.delete {
+  background-color: #fee2e2;
+  color: var(--color-danger);
+}
+
+.action-btn.delete:hover {
+  background-color: #fecaca;
 }
 
 /* Тэги / бейджи */
@@ -130,13 +280,13 @@ body {
   white-space: nowrap;
 }
 
-/* Стили для 404 страницы */
+/* 404 страница */
 .not-found {
   text-align: center;
   padding: 60px 20px;
   background: white;
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--color-border);
 }
 
 .not-found h1 {
@@ -145,13 +295,19 @@ body {
   color: var(--color-primary);
   margin-bottom: 20px;
   line-height: 1;
-  text-shadow: 4px 4px 0 rgba(50, 217, 146, 0.2);
 }
 
 .not-found p {
   font-size: 20px;
   color: var(--color-text-muted);
   margin-bottom: 40px;
+}
+
+.loading {
+  text-align: center;
+  padding: 60px;
+  font-size: 18px;
+  color: var(--color-text-muted);
 }
 
 /* Адаптив */
@@ -172,13 +328,14 @@ body {
     font-size: 80px;
   }
 
-  .not-found p {
-    font-size: 18px;
-  }
-
   .btn {
     padding: 10px 20px;
     font-size: 14px;
+  }
+  
+  .btn-large {
+    padding: 14px 32px;
+    font-size: 16px;
   }
 }
 
@@ -189,5 +346,15 @@ body {
 
   .not-found h1 {
     font-size: 60px;
+  }
+  
+  .btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  
+  .btn-large {
+    padding: 12px 24px;
+    font-size: 15px;
   }
 }

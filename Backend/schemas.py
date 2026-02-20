@@ -91,6 +91,8 @@ class UserCreate(UserBase):
 
 class UserOut(UserBase):
     id: UUID
+    full_name: str
+    city: str
     role_id: int
 
 # Items
@@ -98,7 +100,11 @@ class ItemBase(BaseModel):
     title: str
     description: Optional[str] = None
     price_per_day: float
-    owner_id: UUID
+    category: Optional[str] = None
+    location: Optional[str] = None
+    has_insurance: bool = False
+    has_fast_delivery: bool = False
+    status: str = "active"
 
 class ItemCreate(ItemBase):
     pass
@@ -106,7 +112,9 @@ class ItemCreate(ItemBase):
 class ItemOut(ItemBase):
     id: UUID
     owner_id: UUID
-    status: str
+
+class Config:
+    from_attributes = True
 
 # Feedback
 class FeedbackBase(BaseModel):

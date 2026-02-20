@@ -20,7 +20,11 @@ def create_item(item: ItemCreate, db: Session = Depends(get_db)):
         description=item.description,
         price_per_day=item.price_per_day,
         owner_id=item.owner_id,
-        status="available"
+        status="available",
+        category=item_in.category,
+        location=item_in.location,
+        has_insurance=item_in.has_insurance,
+        has_fast_delivery=item_in.has_fast_delivery
     )
     db.add(db_item)
     db.commit()

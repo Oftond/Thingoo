@@ -32,16 +32,16 @@ function Home() {
           </p>
           <div className="hero-buttons">
             <button 
-              className="hero-btn hero-btn-primary"
-              onClick={() => navigate('/')}
+              className="btn btn-primary btn-large"
+              onClick={() => navigate('/catalog')}
             >
               Вперед к поискам
             </button>
             <button 
-              className="hero-btn hero-btn-secondary"
+              className="btn btn-outline btn-large"
               onClick={() => navigate('/create-listing')}
             >
-              Сделать объявление
+              Сдать в аренду
             </button>
           </div>
         </section>

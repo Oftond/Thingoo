@@ -10,6 +10,7 @@ import {
   FaUser,
   FaSignInAlt,
   FaUserPlus,
+  FaShieldAlt, // Иконка для админ-панели
 } from 'react-icons/fa';
 import './Sidebar.css';
 
@@ -17,10 +18,10 @@ const Sidebar = ({ isOpen, onClose, user, onLoginClick, onRegisterClick }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Меню для авторизованного пользователя
-  const authMenuItems = [
-    { id: 'home', label: 'Главная', icon: FaHome, path: '/home' },
-    { id: 'catalog', label: 'Каталог', icon: FaHome, path: '/' },
+  // Базовые пункты меню для авторизованного пользователя
+  const baseAuthMenuItems = [
+    { id: 'home', label: 'Главная', icon: FaHome, path: '/' },
+    { id: 'catalog', label: 'Каталог', icon: FaHome, path: '/catalog' },
     { id: 'create', label: 'Сдать в аренду', icon: FaPlus, path: '/create-listing' },
     { id: 'my-listings', label: 'Мои объявления', icon: FaList, path: '/my-listings' },
     { id: 'profile', label: 'Профиль', icon: FaUser, path: '/profile' },
@@ -28,17 +29,34 @@ const Sidebar = ({ isOpen, onClose, user, onLoginClick, onRegisterClick }) => {
     { id: 'help', label: 'Помощь', icon: FaQuestionCircle, path: '/help' },
   ];
 
-  // Меню для неавторизованного пользователя
+  // Пункты меню для гостей
   const guestMenuItems = [
-    { id: 'home', label: 'Главная', icon: FaHome, path: '/home' },
-    { id: 'catalog', label: 'Каталог', icon: FaHome, path: '/' },
+    { id: 'home', label: 'Главная', icon: FaHome, path: '/' },
+    { id: 'catalog', label: 'Каталог', icon: FaHome, path: '/catalog' },
     { id: 'create', label: 'Сдать в аренду', icon: FaPlus, path: '/create-listing' },
     { id: 'help', label: 'Помощь', icon: FaQuestionCircle, path: '/help' },
     { id: 'login', label: 'Войти', icon: FaSignInAlt, action: 'login' },
     { id: 'register', label: 'Регистрация', icon: FaUserPlus, action: 'register' },
   ];
 
-  const menuItems = user ? authMenuItems : guestMenuItems;
+  // Формируем меню для авторизованного пользователя (с учетом админа)
+  const getAuthMenuItems = () => {
+    const items = [...baseAuthMenuItems];
+    
+    // Добавляем пункт для админа, если пользователь администратор
+    if (user?.role === 'admin') {
+      items.splice(2, 0, { // Вставляем после 'catalog'
+        id: 'admin',
+        label: 'Админ панель',
+        icon: FaShieldAlt,
+        path: '/admin'
+      });
+    }
+    
+    return items;
+  };
+
+  const menuItems = user ? getAuthMenuItems() : guestMenuItems;
 
   const handleItemClick = (item) => {
     if (item.action === 'login') {
@@ -83,6 +101,9 @@ const Sidebar = ({ isOpen, onClose, user, onLoginClick, onRegisterClick }) => {
           <div className="user-info">
             <div className="user-name">{user.fullName || user.name}</div>
             <div className="user-email">{user.email}</div>
+            {user.role === 'admin' && (
+              <div className="user-role">Администратор</div>
+            )}
           </div>
         </div>
       )}

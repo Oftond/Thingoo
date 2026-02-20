@@ -2,15 +2,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { usersAPI } from '../../services/api';
 import './Profile.css';
 
 const Profile = () => {
   const navigate = useNavigate();
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, logout } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    name: user?.name || '',
+    name: user?.fullName || user?.name || '',
     city: user?.city || '',
     bio: user?.bio || '',
   });
@@ -25,9 +24,9 @@ const Profile = () => {
             <p>Пожалуйста, войдите в систему чтобы просматривать профиль</p>
             <button 
               className="btn btn-primary"
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/')}
             >
-              Войти
+              На главную
             </button>
           </div>
         </div>
@@ -48,7 +47,12 @@ const Profile = () => {
 
   const handleSaveProfile = async () => {
     setLoading(true);
-    const result = await updateUser(formData);
+    const result = await updateUser({
+      fullName: formData.name,
+      name: formData.name,
+      city: formData.city,
+      bio: formData.bio,
+    });
     if (result.success) {
       setIsEditing(false);
     }
@@ -57,7 +61,7 @@ const Profile = () => {
 
   const handleCancelEdit = () => {
     setFormData({
-      name: user.name,
+      name: user.fullName || user.name,
       city: user.city,
       bio: user.bio,
     });
@@ -68,13 +72,16 @@ const Profile = () => {
     navigate('/settings');
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   const handleVerifyPhone = async () => {
-    // Здесь будет логика подтверждения телефона
     alert('Функция подтверждения телефона будет доступна скоро');
   };
 
   const handleEnable2FA = async () => {
-    // Здесь будет логика включения 2FA
     alert('Функция двухфакторной аутентификации будет доступна скоро');
   };
 
@@ -92,7 +99,7 @@ const Profile = () => {
           <div className="card profile-main">
             <div className="profile-header">
               <div className="profile-avatar">
-                <span>{user.name?.[0] || 'U'}</span>
+                <span>{user.fullName?.[0] || user.name?.[0] || 'U'}</span>
               </div>
               <div className="profile-header-info">
                 {isEditing ? (
@@ -105,7 +112,12 @@ const Profile = () => {
                     placeholder="Ваше имя"
                   />
                 ) : (
-                  <h2 className="profile-name">{user.name}</h2>
+                  <div className="profile-name-wrapper">
+                    <h2 className="profile-name">{user.fullName || user.name}</h2>
+                    {user.role === 'admin' && (
+                      <span className="profile-role-badge">Администратор</span>
+                    )}
+                  </div>
                 )}
                 <div className="profile-meta-row">
                   {isEditing ? (
@@ -167,16 +179,10 @@ const Profile = () => {
                 </>
               ) : (
                 <>
-                  <button 
-                    className="btn btn-primary"
-                    onClick={handleEditProfile}
-                  >
+                  <button className="btn btn-primary" onClick={handleEditProfile}>
                     Редактировать профиль
                   </button>
-                  <button 
-                    className="btn btn-outline"
-                    onClick={handleSettings}
-                  >
+                  <button className="btn btn-outline" onClick={handleSettings}>
                     Настройки аккаунта
                   </button>
                 </>
@@ -221,12 +227,7 @@ const Profile = () => {
                   {user.phoneVerified ? (
                     <span className="profile-security-status success">✓</span>
                   ) : (
-                    <button 
-                      className="btn btn-secondary btn-small"
-                      onClick={handleVerifyPhone}
-                    >
-                      Подтвердить
-                    </button>
+                    <button className="btn btn-outline btn-small">Подтвердить</button>
                   )}
                 </li>
                 <li className="profile-security-item">
@@ -234,15 +235,16 @@ const Profile = () => {
                   {user.twoFactorEnabled ? (
                     <span className="profile-security-status success">✓</span>
                   ) : (
-                    <button 
-                      className="btn btn-secondary btn-small"
-                      onClick={handleEnable2FA}
-                    >
-                      Включить
-                    </button>
+                    <button className="btn btn-outline btn-small">Включить</button>
                   )}
                 </li>
               </ul>
+            </div>
+
+            <div className="card profile-logout-card">
+              <button className="btn btn-logout" onClick={handleLogout}>
+                🚪 Выйти из аккаунта
+              </button>
             </div>
           </div>
         </div>
