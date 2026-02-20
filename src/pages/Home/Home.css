@@ -1,0 +1,184 @@
+/* src/pages/Home/Home.css - ОБНОВЛЕННЫЙ */
+.home {
+  background-color: #f4f5f0;
+  min-height: 100vh;
+}
+
+.home-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 48px 32px 64px;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.hero-title {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #004225;
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  max-width: 720px;
+  margin: 0 auto 40px;
+  font-size: 18px;
+  line-height: 1.6;
+  color: #333333;
+}
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Базовые стили для всех hero-кнопок */
+.hero-btn {
+  padding: 16px 40px;
+  border-radius: 100px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+/* Кнопка "Вперед к поискам" - темный фон, зеленый текст */
+.hero-btn-primary {
+  background-color: #004225;
+  color: #32D992;
+}
+
+.hero-btn-primary:hover {
+  background-color: #005a30;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 66, 37, 0.2);
+}
+
+/* Кнопка "Сделать объявление" - теперь такая же как hero-btn-primary */
+.hero-btn-secondary {
+  background-color: #004225;
+  color: #32D992;
+  border: none;
+}
+
+.hero-btn-secondary:hover {
+  background-color: #005a30;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 66, 37, 0.2);
+}
+
+/* Галерея с выравниванием */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.gallery-item {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 66, 37, 0.08);
+  transition: transform 0.3s ease;
+}
+
+.gallery-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 32px rgba(0, 66, 37, 0.12);
+}
+
+.gallery-label {
+  font-size: 16px;
+  font-weight: 600;
+  padding: 16px 20px 8px;
+  color: #004225;
+  background: white;
+}
+
+.gallery-image-wrapper {
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+  position: relative;
+}
+
+.gallery-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.gallery-item:hover .gallery-image {
+  transform: scale(1.08);
+}
+
+.gallery-loading,
+.gallery-error {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px;
+  font-size: 18px;
+  color: #64748b;
+  background: white;
+  border-radius: 16px;
+}
+
+.gallery-error {
+  color: #dc2626;
+}
+
+@media (max-width: 1024px) {
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .home-inner {
+    padding: 32px 20px;
+  }
+
+  .hero-title {
+    font-size: 36px;
+  }
+
+  .hero-subtitle {
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .hero-btn {
+    width: 100%;
+    padding: 14px 24px;
+  }
+
+  .gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-image-wrapper {
+    height: 240px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 28px;
+  }
+}

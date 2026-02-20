@@ -1,0 +1,280 @@
+/* src/components/Layout/Layout.css - Обновленная версия */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif;
+  background-color: #ffffff;
+  color: #1e293b;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  width: 100%;
+}
+
+/* Header */
+.header {
+  background-color: #0a3d2c;
+  padding: 16px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(10, 61, 44, 0.12);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.menu-button {
+  background: none;
+  border: none;
+  color: #32D992;
+  font-size: 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  transition: background-color 0.2s;
+}
+
+.menu-button:hover {
+  background-color: rgba(50, 217, 146, 0.1);
+}
+
+.logo a {
+  font-size: 26px;
+  font-weight: 700;
+  color: #32D992;
+  text-decoration: none;
+  letter-spacing: -0.5px;
+  transition: color 0.2s;
+}
+
+.logo a:hover {
+  color: #ffffff;
+}
+
+.header-nav {
+  display: flex;
+  gap: 24px;
+}
+
+.header-nav .nav-link {
+  background: none;
+  border: none;
+  color: #32D992;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 8px 0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.header-nav .nav-link:hover {
+  color: #ffffff;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Кнопки */
+.btn {
+  padding: 10px 24px;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: #32D992;
+  border: 1.5px solid #32D992;
+}
+
+.btn-outline:hover {
+  border-color: #ffffff;
+  color: #ffffff;
+  background-color: rgba(50, 217, 146, 0.1);
+}
+
+.btn-login {
+  background-color: transparent;
+  color: #32D992;
+  border: 1.5px solid #32D992;
+}
+
+.btn-login:hover {
+  border-color: #ffffff;
+  color: #ffffff;
+  background-color: rgba(50, 217, 146, 0.1);
+}
+
+.user-name {
+  color: #32D992;
+  font-weight: 500;
+}
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(10, 61, 44, 0.5);
+  z-index: 90;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+}
+.main-content {
+  flex: 1;
+  padding: 48px 0;
+  background-color: #ffffff;
+}
+
+.footer {
+  background-color: #0a3d2c;
+  padding: 24px 0;
+  margin-top: auto;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-logo a {
+  font-size: 26px;
+  font-weight: 700;
+  color: #32D992;
+  text-decoration: none;
+  letter-spacing: -0.5px;
+  transition: color 0.2s;
+}
+
+.footer-logo a:hover {
+  color: #ffffff;
+}
+
+.footer-links {
+  display: flex;
+  gap: 32px;
+}
+
+.footer-links button {
+  background: none;
+  border: none;
+  color: #32D992;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s;
+  text-transform: lowercase;
+}
+
+.footer-links button:first-letter {
+  text-transform: uppercase;
+}
+
+.footer-links button:hover {
+  color: #ffffff;
+}
+
+.user-name-btn {
+  background: none;
+  border: 2px solid var(--color-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  transition: all 0.2s;
+  background-color: transparent;
+}
+
+.user-name-btn:hover {
+  background-color: rgba(10, 61, 44, 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(10, 61, 44, 0.1);
+}
+
+.user-name {
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.admin-badge {
+  background-color: #8b5cf6;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+  
+  .footer-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .header-nav {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-actions {
+    display: none;
+  }
+
+  .header-left {
+    gap: 24px;
+  }
+}

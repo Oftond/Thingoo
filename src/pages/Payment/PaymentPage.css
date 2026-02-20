@@ -1,0 +1,547 @@
+/* src/pages/Payment/PaymentPage.css */
+.payment-page {
+  min-height: 100vh;
+  background-color: #f5f7fa;
+  padding: 40px 0;
+}
+
+.payment-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.payment-title {
+  color: #004225;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.payment-subtitle {
+  color: #64748b;
+  font-size: 16px;
+}
+
+.payment-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.payment-form-card,
+.payment-summary-card {
+  background: white;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(0, 66, 37, 0.08);
+  border: 1px solid #e2e8f0;
+}
+
+.payment-form-card h2,
+.payment-summary-card h2 {
+  color: #004225;
+  font-size: 20px;
+  margin-bottom: 24px;
+  font-weight: 600;
+}
+
+/* Методы оплаты */
+.payment-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.payment-method {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.payment-method:hover {
+  border-color: #32D992;
+  background-color: #f0fdf4;
+}
+
+.payment-method input[type="radio"] {
+  margin-right: 15px;
+  accent-color: #004225;
+  width: 18px;
+  height: 18px;
+}
+
+.method-icon {
+  font-size: 24px;
+  margin-right: 12px;
+}
+
+.method-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+/* Форма оплаты */
+.payment-form {
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.payment-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 15px;
+  transition: all 0.2s;
+  background-color: #f8fafc;
+}
+
+.payment-input:focus {
+  outline: none;
+  border-color: #32D992;
+  box-shadow: 0 0 0 3px rgba(50, 217, 146, 0.1);
+  background-color: white;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+/* СБП */
+.payment-sbp {
+  text-align: center;
+  padding: 30px 20px;
+  background-color: #f8fafc;
+  border-radius: 16px;
+  margin: 20px 0;
+}
+
+.sbp-qr {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.qr-placeholder {
+  width: 200px;
+  height: 200px;
+  background: white;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #cbd5e1;
+}
+
+.qr-placeholder span {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.qr-placeholder p {
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 5px;
+}
+
+.qr-placeholder small {
+  color: #64748b;
+}
+
+/* ЮMoney */
+.payment-yoomoney {
+  text-align: center;
+  padding: 30px;
+  background-color: #f8fafc;
+  border-radius: 16px;
+  margin: 20px 0;
+}
+
+.yoomoney-button {
+  background-color: #ffdb4d;
+  color: #000;
+  border: none;
+  padding: 14px 30px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: all 0.2s;
+}
+
+.yoomoney-button:hover {
+  background-color: #ffd633;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 219, 77, 0.3);
+}
+
+/* Соглашение */
+.payment-agreement {
+  margin: 25px 0 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 12px;
+}
+
+.checkbox-label input {
+  display: none;
+}
+
+.checkbox-custom {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #cbd5e1;
+  border-radius: 6px;
+  position: relative;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.checkbox-label input:checked + .checkbox-custom {
+  background-color: #004225;
+  border-color: #004225;
+}
+
+.checkbox-label input:checked + .checkbox-custom::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.checkbox-text {
+  font-size: 14px;
+  color: #1e293b;
+}
+
+/* Кнопка оплаты */
+.payment-submit-btn {
+  width: 100%;
+  padding: 16px;
+  background-color: #004225;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 15px;
+}
+
+.payment-submit-btn:hover:not(:disabled) {
+  background-color: #005a30;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 66, 37, 0.2);
+}
+
+.payment-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.payment-secure {
+  text-align: center;
+  color: #64748b;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+/* Правая колонка - детали заказа */
+.order-item {
+  padding: 15px 0;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 20px;
+}
+
+.item-info h3 {
+  font-size: 18px;
+  color: #1e293b;
+  margin-bottom: 5px;
+}
+
+.item-owner {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.order-details {
+  margin-bottom: 20px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  color: #475569;
+  font-size: 15px;
+}
+
+.detail-row.discount {
+  color: #059669;
+  border-top: 1px dashed #e2e8f0;
+  margin-top: 5px;
+  padding-top: 15px;
+}
+
+.order-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 0;
+  border-top: 2px solid #e2e8f0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.total-amount {
+  color: #004225;
+  font-size: 24px;
+}
+
+.order-info {
+  margin: 20px 0;
+  padding: 20px;
+  background-color: #f0fdf4;
+  border-radius: 12px;
+}
+
+.order-info h4 {
+  color: #004225;
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+.order-info ul {
+  list-style: none;
+  padding: 0;
+}
+
+.order-info li {
+  padding: 6px 0;
+  color: #475569;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.order-support {
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.order-support p {
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.order-support a {
+  color: #004225;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.order-support a:hover {
+  text-decoration: underline;
+}
+
+/* Страница успеха */
+.payment-success {
+  max-width: 600px;
+  margin: 60px auto;
+  text-align: center;
+  background: white;
+  padding: 50px;
+  border-radius: 32px;
+  box-shadow: 0 10px 40px rgba(0, 66, 37, 0.1);
+}
+
+.success-icon-large {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #004225, #32D992);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  margin: 0 auto 30px;
+  animation: scaleIn 0.5s ease;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.payment-success h1 {
+  color: #004225;
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.success-message {
+  color: #475569;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.success-message strong {
+  color: #004225;
+}
+
+.success-details {
+  text-align: left;
+  background-color: #f8fafc;
+  padding: 25px;
+  border-radius: 16px;
+  margin: 30px 0;
+}
+
+.success-details h3 {
+  color: #1e293b;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.success-details ul {
+  list-style: none;
+  padding: 0;
+}
+
+.success-details li {
+  padding: 8px 0;
+  color: #475569;
+  font-size: 15px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.success-details li:last-child {
+  border-bottom: none;
+}
+
+.success-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+/* Неавторизован */
+.payment-not-authorized {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 24px;
+  max-width: 500px;
+  margin: 100px auto;
+}
+
+.payment-not-authorized h2 {
+  color: #004225;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.payment-not-authorized p {
+  color: #64748b;
+  margin-bottom: 30px;
+}
+
+/* Адаптив */
+@media (max-width: 1024px) {
+  .payment-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .payment-summary-card {
+    order: -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .payment-page {
+    padding: 20px 0;
+  }
+  
+  .payment-form-card,
+  .payment-summary-card {
+    padding: 24px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .payment-success {
+    margin: 30px 20px;
+    padding: 30px 20px;
+  }
+  
+  .success-actions {
+    flex-direction: column;
+  }
+  
+  .payment-title {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .payment-method {
+    padding: 12px;
+  }
+  
+  .order-total {
+    font-size: 16px;
+  }
+  
+  .total-amount {
+    font-size: 20px;
+  }
+}

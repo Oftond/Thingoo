@@ -1,0 +1,360 @@
+:root {
+  --color-bg: #f5f7fa;
+  --color-surface: #ffffff;
+  --color-primary: #0a3d2c;
+  --color-primary-dark: #005a30;
+  --color-accent: #32D992;
+  --color-border: #e2e8f0;
+  --color-text-main: #1e293b;
+  --color-text-muted: #64748b;
+  --color-danger: #ef4444;
+  --color-danger-dark: #dc2626;
+
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+  --radius-pill: 100px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  width: 100%;
+}
+
+.page {
+  padding: 48px 0;
+  min-height: 60vh;
+}
+
+.page-header {
+  margin-bottom: 32px;
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+
+.page-subtitle {
+  font-size: 16px;
+  color: var(--color-text-muted);
+  max-width: 600px;
+}
+
+.card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  padding: 28px;
+}
+
+/* ===== ЕДИНЫЙ СТИЛЬ ДЛЯ ВСЕХ КНОПОК ===== */
+.btn {
+  padding: 12px 28px;
+  border-radius: var(--radius-pill);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-outline,
+.btn-login,
+.btn-register {
+  background-color: var(--color-primary);
+  color: var(--color-accent);
+}
+
+.btn-primary:hover:not(:disabled),
+.btn-secondary:hover:not(:disabled),
+.btn-outline:hover:not(:disabled),
+.btn-login:hover:not(:disabled),
+.btn-register:hover:not(:disabled) {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+}
+
+.btn-primary:active:not(:disabled),
+.btn-secondary:active:not(:disabled),
+.btn-outline:active:not(:disabled),
+.btn-login:active:not(:disabled),
+.btn-register:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-danger {
+  background-color: var(--color-danger);
+  color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: var(--color-danger-dark);
+  transform: translateY(-2px);
+}
+
+.btn-logout {
+  background-color: var(--color-danger);
+  color: white;
+  border: none;
+  padding: 14px 20px;
+  font-size: 16px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-logout:hover:not(:disabled) {
+  background-color: var(--color-danger-dark);
+  transform: translateY(-2px);
+}
+
+.btn-small {
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+.btn-large {
+  padding: 16px 40px;
+  font-size: 18px;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.modal-primary-btn,
+.modal-secondary-btn {
+  background-color: var(--color-primary);
+  color: var(--color-accent);
+  border: none;
+  padding: 14px 20px;
+  border-radius: var(--radius-pill);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.modal-primary-btn:hover:not(:disabled),
+.modal-secondary-btn:hover:not(:disabled) {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+}
+
+.btn-card,
+.btn-rent {
+  width: 100%;
+  padding: 14px;
+  background-color: var(--color-primary);
+  color: var(--color-accent);
+  border: none;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-card:hover,
+.btn-rent:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+}
+
+.filter-tab {
+  padding: 8px 20px;
+  border: none;
+  background-color: var(--color-primary);
+  color: var(--color-accent);
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-tab:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-1px);
+}
+
+.filter-tab.active {
+  background-color: var(--color-primary-dark);
+}
+
+.action-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  background-color: var(--color-primary);
+  color: var(--color-accent);
+}
+
+.action-btn:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+}
+
+.action-btn.block {
+  background-color: #fee2e2;
+  color: var(--color-danger);
+}
+
+.action-btn.block:hover {
+  background-color: #fecaca;
+}
+
+.action-btn.unblock {
+  background-color: #d1fae5;
+  color: #10b981;
+}
+
+.action-btn.unblock:hover {
+  background-color: #a7f3d0;
+}
+
+.action-btn.delete {
+  background-color: #fee2e2;
+  color: var(--color-danger);
+}
+
+.action-btn.delete:hover {
+  background-color: #fecaca;
+}
+
+/* Тэги / бейджи */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  background-color: #f1f5f9;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+/* 404 страница */
+.not-found {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+}
+
+.not-found h1 {
+  font-size: 120px;
+  font-weight: 800;
+  color: var(--color-primary);
+  margin-bottom: 20px;
+  line-height: 1;
+}
+
+.not-found p {
+  font-size: 20px;
+  color: var(--color-text-muted);
+  margin-bottom: 40px;
+}
+
+.loading {
+  text-align: center;
+  padding: 60px;
+  font-size: 18px;
+  color: var(--color-text-muted);
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .page {
+    padding: 32px 0;
+  }
+
+  .page-title {
+    font-size: 28px;
+  }
+
+  .not-found h1 {
+    font-size: 80px;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+  
+  .btn-large {
+    padding: 14px 32px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 24px;
+  }
+
+  .not-found h1 {
+    font-size: 60px;
+  }
+  
+  .btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  
+  .btn-large {
+    padding: 12px 24px;
+    font-size: 15px;
+  }
+}
