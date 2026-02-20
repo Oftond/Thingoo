@@ -55,9 +55,10 @@ async def register(user_data: UserRegister, db: Session = Depends(get_db)):
 
 @router.post("/login")
 def login(user: UserLogin, db: Session = Depends(get_db)):
+    print("Login success")
     db_user = db.query(User).filter(User.email == user.email).first()
     if not db_user or not pwd_context.verify(user.password, db_user.password_hash):
         raise HTTPException(401, "Invalid credentials")
     return {
-        "user": db_user.__dict__  # или db_user.__dict__ если нет Pydantic-модели
+        "user": db_user.__dict__
     }

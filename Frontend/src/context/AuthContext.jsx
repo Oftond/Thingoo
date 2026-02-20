@@ -32,13 +32,19 @@ export const AuthProvider = ({ children }) => {
     return { success: true };
   };
 
+  const register = async (userData) => {
+    const response = await authAPI.register(userData);
+
+    return { success: true };
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, register, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
