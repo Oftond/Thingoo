@@ -79,10 +79,20 @@ export const itemsAPI = {
 
 // ===== МЕДИА (ФОТО) - ЭТО НУЖНО ДЛЯ CreateListingPage =====
 export const mediaAPI = {
-  uploadItemPhotos: (itemId, formData) => 
-    api.post(`/media/items/${itemId}/photos`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    }),
+  uploadItemPhotos: async (itemId, formData, config = {}) => {
+    try {
+      const response = await api.post(`/media/items/${itemId}/photos`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        ...config,
+      });
+      return response;
+    } catch (error) {
+      console.error('Error uploading photos:', error);
+      throw error;
+    }
+  },
   getItemPhotos: (itemId) => api.get(`/media/items/${itemId}/photos`),
   getPhoto: (photoId) => api.get(`/media/photos/${photoId}`, { responseType: 'blob' }),
   deletePhoto: (photoId) => api.delete(`/media/photos/${photoId}`),

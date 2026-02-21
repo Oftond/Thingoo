@@ -23,11 +23,11 @@ const CreateListingPage = () => {
   const [formData, setFormData] = useState({
     title: '',
     category: '',
-    price: '',
+    price_per_day: '',
     location: '',
     description: '',
-    hasInsurance: false,
-    hasFastDelivery: false,
+    has_insurance: false,
+    has_fast_delivery: false
   });
 
   const categories = [
@@ -58,13 +58,13 @@ const CreateListingPage = () => {
 
     if (formData.title.trim() !== '') filledFields += 1;
     if (formData.category !== '') filledFields += 1;
-    if (formData.price !== '') filledFields += 1;
+    if (formData.price_per_day !== '') filledFields += 1;
     if (formData.location.trim() !== '') filledFields += 1;
 
     if (step === 2) {
       if (formData.description.trim() !== '') filledFields += 1;
-      if (formData.hasInsurance) filledFields += 0.5;
-      if (formData.hasFastDelivery) filledFields += 0.5;
+      if (formData.has_insurance) filledFields += 0.5;
+      if (formData.has_fast_delivery) filledFields += 0.5;
       if (images.length > 0) filledFields += 1;
     }
 
@@ -94,7 +94,7 @@ const CreateListingPage = () => {
       preview: URL.createObjectURL(file),
     }));
 
-    setImages((prev) => {
+  setImages((prev) => {
       const updated = [...prev, ...newImages];
       if (!previewURL && updated.length > 0) {
         setPreviewURL(updated[0].preview);
@@ -147,7 +147,7 @@ const CreateListingPage = () => {
       if (
         !formData.title.trim() ||
         !formData.category ||
-        !formData.price ||
+        !formData.price_per_day ||
         !formData.location.trim()
       ) {
         setError('Заполните название, категорию, цену и город/район перед продолжением.');
@@ -186,8 +186,8 @@ const CreateListingPage = () => {
     try {
       const itemData = {
         ...formData,
-        price: parseInt(formData.price),
-        userId: user.id,
+        price_per_day: parseInt(formData.price_per_day),
+        owner_id: user.id,
         status: 'active',
       };
 
@@ -195,11 +195,24 @@ const CreateListingPage = () => {
       const itemId = response.data.id;
 
       if (images.length > 0) {
+        console.log('Uploading files:', images.map(img=>img.file.name));
+
         const formData = new FormData();
         images.forEach((img) => {
-          formData.append('photos', img.file);
+          formData.append('files', img.file);
         });
-        await mediaAPI.uploadItemPhotos(itemId, formData);
+
+        for (let [key, value] of formData.entries()) {
+          console.log(key, value.name || value);
+        }
+
+        const config = {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        };
+
+        await mediaAPI.uploadItemPhotos(itemId, formData, config);
       }
 
       alert('Объявление успешно создано!');
@@ -316,9 +329,9 @@ const CreateListingPage = () => {
                     <input
                       type="number"
                       id="price"
-                      name="price"
+                      name="price_per_day"
                       placeholder="500"
-                      value={formData.price}
+                      value={formData.price_per_day}
                       onChange={handleInputChange}
                       min="0"
                     />
@@ -497,7 +510,7 @@ const CreateListingPage = () => {
                 </div>
                 <div className="ad-content">
                   <div className="ad-price">
-                    {formData.price ? `${formData.price} ₽ / сутки` : 'Цена ещё не указана'}
+                    {formData.price_per_day ? `${formData.price_per_day} ₽ / сутки` : 'Цена ещё не указана'}
                   </div>
                   <h4 className="ad-title">
                     {formData.title || 'Название объявления'}

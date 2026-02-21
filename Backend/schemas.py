@@ -105,16 +105,16 @@ class ItemBase(BaseModel):
     has_insurance: bool = False
     has_fast_delivery: bool = False
     status: str = "active"
+    owner_id: UUID
+
+    class Config:
+        from_attributes = True
 
 class ItemCreate(ItemBase):
     pass
 
 class ItemOut(ItemBase):
     id: UUID
-    owner_id: UUID
-
-class Config:
-    from_attributes = True
 
 # Feedback
 class FeedbackBase(BaseModel):

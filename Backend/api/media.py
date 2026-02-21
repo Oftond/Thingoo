@@ -1,4 +1,6 @@
-from fastapi import APIRouter, File, UploadFile, HTTPException, Query
+# api/media.py
+from typing import List
+from fastapi import APIRouter, File, UploadFile, HTTPException, Query, Form
 from fastapi.responses import StreamingResponse
 from models.mongoDB import media_collection
 from bson import ObjectId
@@ -8,32 +10,33 @@ import io
 router = APIRouter(prefix="/api/v1/media", tags=["Media"])
 
 @router.post("/items/{item_id}/photos")
-async def upload_item_photo(item_id: str, file: UploadFile = File(...),is_primary: bool = Query(False)):
+async def upload_item_photos(item_id: str, files: List[UploadFile] = File(...)):
     """Загрузить фото для предмета"""
-    if not file.content_type.startswith("image/"):
-        raise HTTPException(400, "Only image files are allowed")
+    print("!!!!!")
+    uploaded_photos = []
+    for file in files:
+        if not file.content_type.startswith("image/"):
+            raise HTTPException(400, f"File {file.filename} is not an image")
 
-    contents = await file.read()
-    
-    photo_doc = {
-        "entity_type": "item",
-        "entity_id": item_id,
-        "file_name": file.filename,
-        "content_type": file.content_type,
-        "data": contents,
-        "size": len(contents),
-        "is_primary": is_primary,
-        "uploaded_at": datetime.utcnow()
-    }
-
-    result = await media_collection.insert_one(photo_doc)
-    
-    return {
-        "id": str(result.inserted_id),
-        "entity_id": item_id,
-        "file_name": file.filename,
-        "is_primary": is_primary
-    }
+        contents = await file.read()
+        photo_doc = {
+            "entity_type": "item",
+            "entity_id": item_id,
+            "file_name": file.filename,
+            "content_type": file.content_type,
+            "data": contents,
+            "size": len(contents),
+            "is_primary": False,
+            "uploaded_at": datetime.utcnow()
+        }
+        result = await media_collection.insert_one(photo_doc)
+        uploaded_photos.append({
+            "id": str(result.inserted_id),
+            "entity_id": item_id,
+            "file_name": file.filename,
+            "is_primary": False
+        })
+    return uploaded_photos
 
 @router.get("/items/{item_id}/photos")
 async def get_item_photos(item_id: str):
