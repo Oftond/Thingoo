@@ -1,5 +1,5 @@
 // src/pages/ListingDetail/ListingDetailPage.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   FaPhone,
   FaMapMarkerAlt,
@@ -10,16 +10,24 @@ import {
   FaShieldAlt,
   FaTruck,
   FaSyncAlt,
+  FaUser,
 } from 'react-icons/fa';
 import { useParams, useNavigate } from 'react-router-dom';
+import { itemsAPI, mediaAPI, usersAPI } from '../../services/api';
 import './ListingDetailPage.css';
 
 const ListingDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const [listing, setListing] = useState(null);
+  const [owner, setOwner] = useState(null);
+  const [photos, setPhotos] = useState([]);
+  const [photoUrls, setPhotoUrls] = useState({});
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   const categories = [
     { id: 'electronics', name: 'Электроника', icon: '💻' },
@@ -32,63 +40,96 @@ const ListingDetailPage = () => {
     { id: 'music', name: 'Музыка и звук', icon: '🎸' },
   ];
 
-  const listing = {
-    id: Number(id) || 1,
-    title: 'Sony Alpha 7 III + объектив 28–70 мм',
-    price: 1200,
-    location: 'Новосибирск, центр',
-    rating: 4.8,
-    reviews: 24,
-    category: 'electronics',
-    isNew: true,
-    hasInsurance: true,
-    hasFastDelivery: true,
-    description:
-      'Полнокадровая камера Sony A7 III в отличном состоянии. В комплект входит объектив 28–70 мм, два аккумулятора, зарядное устройство и сумка. Идеально подойдёт для съёмки путешествий, портретов и мероприятий.',
-    images: [
-      'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=900&q=80',
-      'https://images.unsplash.com/photo-1516031190212-da133013de50?auto=format&fit=crop&w=900&q=80',
-      'https://images.unsplash.com/photo-1473654729523-203e25dfda10?auto=format&fit=crop&w=900&q=80',
-    ],
-    specifications: [
-      { label: 'Тип камеры', value: 'Беззеркальная, full-frame' },
-      { label: 'Разрешение', value: '24.2 Мп' },
-      { label: 'Видео', value: '4K 30fps' },
-      { label: 'Стабилизация', value: '5-осевая' },
-      { label: 'Батарея', value: 'До 700 снимков' },
-      { label: 'Вес', value: '650 г' },
-    ],
-    availability: {
-      minRentalDays: 2,
-      maxRentalDays: 30,
-      availableFrom: 'С сегодняшнего дня',
-    },
-    conditions: {
-      deposit: '15 000 ₽',
-      idRequired: 'Паспорт РФ',
-      signingRequired: 'Простое расписка / договор аренды',
-      pickup: 'Самовывоз или встреча у метро',
-    },
-    owner: {
-      name: 'Алексей',
-      avatar:
-        'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=400&q=80',
-      rating: 4.9,
-      reviews: 58,
-      completedRentals: 120,
-      responseTime: 'обычно в течение 15 минут',
-      memberSince: 'с 2022 года',
-      responseRate: 'Ответов на сообщения: 98%',
-    },
-  };
+  useEffect(() => {
+    const fetchListingData = async () => {
+      try {
+        setLoading(true);
+        
+        // Получаем данные объявления
+        console.log('Fetching listing with ID:', id);
+        const listingResponse = await itemsAPI.getById(id);
+        const listingData = listingResponse.data;
+        setListing(listingData);
+        
+        // Получаем данные владельца
+        if (listingData.owner_id) {
+          try {
+            const ownerResponse = await usersAPI.getById(listingData.owner_id);
+            setOwner(ownerResponse.data);
+          } catch (ownerErr) {
+            console.error('Failed to load owner data:', ownerErr);
+            // Устанавливаем базовые данные владельца
+            setOwner({
+              name: 'Пользователь',
+              rating: 5.0,
+              reviews: 0,
+              completedRentals: 0,
+              memberSince: new Date().getFullYear(),
+              responseRate: '100%',
+              responseTime: 'обычно в течение часа',
+            });
+          }
+        }
+        
+        // Получаем фото объявления
+        try {
+          const photosResponse = await mediaAPI.getItemPhotos(id);
+          const photosData = photosResponse.data || [];
+          setPhotos(photosData);
+          
+          // Загружаем URL для каждого фото
+          const urls = {};
+          photosData.forEach((photo, index) => {
+            urls[photo.id] = mediaAPI.getPhotoUrl(photo.id);
+          });
+          setPhotoUrls(urls);
+          
+        } catch (photoErr) {
+          console.error('Failed to load photos:', photoErr);
+        }
+        
+      } catch (err) {
+        console.error('Failed to load listing:', err);
+        setError('Не удалось загрузить информацию об объявлении');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchListingData();
+    }
+  }, [id]);
+
+  // Очищаем URL-объекты при размонтировании
+  useEffect(() => {
+    return () => {
+      Object.values(photoUrls).forEach(url => {
+        if (url && url.startsWith('blob:')) {
+          URL.revokeObjectURL(url);
+        }
+      });
+    };
+  }, [photoUrls]);
 
   const getCategoryIcon = () => {
+    if (!listing) return '';
     const category = categories.find((c) => c.id === listing.category);
     return category ? category.icon : '';
   };
 
+  const getCategoryName = () => {
+    if (!listing) return '';
+    const category = categories.find((c) => c.id === listing.category);
+    return category ? category.name : listing.category || 'Другое';
+  };
+
   const handleContact = () => {
-    alert(`Связаться с владельцем: ${listing.owner.name} — +7 999 123-45-67`);
+    if (owner?.phone) {
+      alert(`Связаться с владельцем: ${owner.name} — ${owner.phone}`);
+    } else {
+      alert(`Связаться с владельцем: ${owner?.name || 'Пользователь'}`);
+    }
   };
 
   const handlePayment = () => {
@@ -100,16 +141,58 @@ const ListingDetailPage = () => {
   };
 
   const nextImage = () => {
+    if (photos.length === 0) return;
     setActiveImageIndex((prev) =>
-      prev === listing.images.length - 1 ? 0 : prev + 1
+      prev === photos.length - 1 ? 0 : prev + 1
     );
   };
 
   const prevImage = () => {
+    if (photos.length === 0) return;
     setActiveImageIndex((prev) =>
-      prev === 0 ? listing.images.length - 1 : prev - 1
+      prev === 0 ? photos.length - 1 : prev - 1
     );
   };
+
+  const handleImageError = (e, photoId) => {
+    console.log(`Image load error for photo ${photoId}`);
+    e.target.onerror = null;
+    e.target.src = 'https://via.placeholder.com/900x600?text=Image+not+available';
+  };
+
+  if (loading) {
+    return (
+      <div className="listing-detail-page">
+        <main className="main-content">
+          <div className="container">
+            <div className="loading-spinner">Загрузка...</div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (error || !listing) {
+    return (
+      <div className="listing-detail-page">
+        <main className="main-content">
+          <div className="container">
+            <div className="error-message">
+              <h2>Ошибка</h2>
+              <p>{error || 'Объявление не найдено'}</p>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => navigate('/catalog')}
+              >
+                Вернуться в каталог
+              </button>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="listing-detail-page">
@@ -127,20 +210,28 @@ const ListingDetailPage = () => {
             <div className="listing-detail-left">
               <section className="image-gallery">
                 <div className="main-image-container">
-                  <img
-                    src={listing.images[activeImageIndex]}
-                    alt={listing.title}
-                    className="main-image"
-                  />
+                  {photos.length > 0 && photoUrls[photos[activeImageIndex]?.id] ? (
+                    <img
+                      src={photoUrls[photos[activeImageIndex].id]}
+                      alt={listing.title}
+                      className="main-image"
+                      onError={(e) => handleImageError(e, photos[activeImageIndex].id)}
+                    />
+                  ) : (
+                    <div className="main-image-placeholder">
+                      <span className="placeholder-icon">{getCategoryIcon()}</span>
+                      <span className="placeholder-text">Нет фото</span>
+                    </div>
+                  )}
 
                   <div className="listing-badges">
-                    {listing.hasInsurance && (
+                    {listing.has_insurance && (
                       <span className="badge badge-insurance">
                         <FaShieldAlt />
                         Страховка / залог
                       </span>
                     )}
-                    {listing.hasFastDelivery && (
+                    {listing.has_fast_delivery && (
                       <span className="badge badge-delivery">
                         <FaTruck />
                         Быстрая доставка
@@ -163,37 +254,49 @@ const ListingDetailPage = () => {
                   </button>
                 </div>
 
-                <div className="image-pagination">
-                  <button
-                    type="button"
-                    className="image-pagination-btn"
-                    onClick={prevImage}
-                  >
-                    ◀ Предыдущее
-                  </button>
-                  <button
-                    type="button"
-                    className="image-pagination-btn"
-                    onClick={nextImage}
-                  >
-                    Следующее ▶
-                  </button>
-                </div>
+                {photos.length > 1 && (
+                  <>
+                    <div className="image-pagination">
+                      <button
+                        type="button"
+                        className="image-pagination-btn"
+                        onClick={prevImage}
+                      >
+                        ◀ Предыдущее
+                      </button>
+                      <button
+                        type="button"
+                        className="image-pagination-btn"
+                        onClick={nextImage}
+                      >
+                        Следующее ▶
+                      </button>
+                    </div>
 
-                <div className="thumbnail-gallery">
-                  {listing.images.map((image, index) => (
-                    <button
-                      key={index}
-                      type="button"
-                      className={`thumbnail ${
-                        activeImageIndex === index ? 'active' : ''
-                      }`}
-                      onClick={() => setActiveImageIndex(index)}
-                    >
-                      <img src={image} alt={`Миниатюра ${index + 1}`} />
-                    </button>
-                  ))}
-                </div>
+                    <div className="thumbnail-gallery">
+                      {photos.map((photo, index) => (
+                        <button
+                          key={photo.id}
+                          type="button"
+                          className={`thumbnail ${
+                            activeImageIndex === index ? 'active' : ''
+                          }`}
+                          onClick={() => setActiveImageIndex(index)}
+                        >
+                          {photoUrls[photo.id] ? (
+                            <img 
+                              src={photoUrls[photo.id]} 
+                              alt={`Миниатюра ${index + 1}`}
+                              onError={(e) => handleImageError(e, photo.id)}
+                            />
+                          ) : (
+                            <div className="thumbnail-placeholder">📷</div>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
               </section>
 
               <section className="listing-info">
@@ -203,19 +306,16 @@ const ListingDetailPage = () => {
                       <span className="category-icon-small">
                         {getCategoryIcon()}
                       </span>
-                      <span>
-                        {categories.find((c) => c.id === listing.category)?.name}
-                      </span>
+                      <span>{getCategoryName()}</span>
                     </div>
                     <h1 className="listing-title">{listing.title}</h1>
                   </div>
 
                   <div className="price-section">
                     <div className="price-display">
-                      <span className="price-amount">{listing.price} ₽</span>
+                      <span className="price-amount">{listing.price_per_day} ₽</span>
                       <span className="price-period">в сутки</span>
                     </div>
-                    {/* Кнопка оплаты вместо бронирования */}
                     <button
                       type="button"
                       className="btn btn-primary"
@@ -229,38 +329,40 @@ const ListingDetailPage = () => {
                 <div className="listing-meta">
                   <div className="meta-item">
                     <FaMapMarkerAlt className="meta-icon" />
-                    <span className="meta-text">{listing.location}</span>
+                    <span className="meta-text">{listing.location || 'Не указано'}</span>
                   </div>
                   <div className="meta-item">
                     <FaStar className="meta-icon star" />
                     <span className="meta-text">
-                      {listing.rating} · {listing.reviews} отзывов
+                      {listing.rating || 'Нет'} · {listing.reviews || 0} отзывов
                     </span>
                   </div>
                   <div className="meta-item">
                     <FaCalendarAlt className="meta-icon" />
                     <span className="meta-text">
-                      Доступно: {listing.availability.availableFrom}
+                      Добавлено: {new Date(listing.created_at || Date.now()).toLocaleDateString()}
                     </span>
                   </div>
                 </div>
 
                 <div className="listing-description">
                   <h2>Описание</h2>
-                  <p>{listing.description}</p>
+                  <p>{listing.description || 'Описание отсутствует'}</p>
                 </div>
 
-                <div className="listing-specifications">
-                  <h2>Характеристики</h2>
-                  <div className="specs-grid">
-                    {listing.specifications.map((spec, index) => (
-                      <div key={index} className="spec-item">
-                        <span className="spec-label">{spec.label}</span>
-                        <span className="spec-value">{spec.value}</span>
-                      </div>
-                    ))}
+                {listing.specifications && listing.specifications.length > 0 && (
+                  <div className="listing-specifications">
+                    <h2>Характеристики</h2>
+                    <div className="specs-grid">
+                      {listing.specifications.map((spec, index) => (
+                        <div key={index} className="spec-item">
+                          <span className="spec-label">{spec.label}</span>
+                          <span className="spec-value">{spec.value}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <div className="listing-conditions">
                   <h2>Условия аренды</h2>
@@ -270,7 +372,7 @@ const ListingDetailPage = () => {
                       <div>
                         <span className="condition-label">Минимальный срок</span>
                         <span className="condition-value">
-                          {listing.availability.minRentalDays} дня
+                          {listing.min_rental_days || 1} {listing.min_rental_days === 1 ? 'день' : 'дня'}
                         </span>
                       </div>
                     </div>
@@ -280,7 +382,7 @@ const ListingDetailPage = () => {
                       <div>
                         <span className="condition-label">Максимальный срок</span>
                         <span className="condition-value">
-                          до {listing.availability.maxRentalDays} дней
+                          до {listing.max_rental_days || 30} дней
                         </span>
                       </div>
                     </div>
@@ -290,7 +392,7 @@ const ListingDetailPage = () => {
                       <div>
                         <span className="condition-label">Залог</span>
                         <span className="condition-value">
-                          {listing.conditions.deposit}
+                          {listing.deposit ? `${listing.deposit} ₽` : 'Не требуется'}
                         </span>
                       </div>
                     </div>
@@ -300,7 +402,7 @@ const ListingDetailPage = () => {
                       <div>
                         <span className="condition-label">Документы</span>
                         <span className="condition-value">
-                          {listing.conditions.idRequired}
+                          {listing.required_docs || 'Паспорт'}
                         </span>
                       </div>
                     </div>
@@ -310,7 +412,7 @@ const ListingDetailPage = () => {
                       <div>
                         <span className="condition-label">Выдача</span>
                         <span className="condition-value">
-                          {listing.conditions.pickup}
+                          {listing.pickup_method || 'Самовывоз'}
                         </span>
                       </div>
                     </div>
@@ -321,28 +423,34 @@ const ListingDetailPage = () => {
                   <h2>Владелец</h2>
                   <div className="owner-card">
                     <div className="owner-avatar">
-                      <img src={listing.owner.avatar} alt={listing.owner.name} />
+                      {owner?.avatar ? (
+                        <img src={owner.avatar} alt={owner.name} />
+                      ) : (
+                        <div className="avatar-placeholder">
+                          <FaUser />
+                        </div>
+                      )}
                     </div>
                     <div className="owner-info">
-                      <h3>{listing.owner.name}</h3>
+                      <h3>{owner?.name || 'Пользователь'}</h3>
                       <div className="owner-stats">
                         <div className="stat-item">
                           <FaStar className="stat-icon" />
                           <span>
-                            {listing.owner.rating} · {listing.owner.reviews} отзывов
+                            {owner?.rating || 5.0} · {owner?.reviews || 0} отзывов
                           </span>
                         </div>
                         <div className="stat-item">
                           <FaSyncAlt className="stat-icon" />
-                          <span>{listing.owner.completedRentals} аренд</span>
+                          <span>{owner?.completedRentals || 0} аренд</span>
                         </div>
                         <div className="stat-item">
                           <FaCalendarAlt className="stat-icon" />
-                          <span>{listing.owner.memberSince}</span>
+                          <span>с {owner?.memberSince || '2024'} года</span>
                         </div>
                       </div>
                       <div className="response-rate">
-                        {listing.owner.responseRate}, {listing.owner.responseTime}
+                        {owner?.responseRate || '100%'} ответов, {owner?.responseTime || 'обычно в течение часа'}
                       </div>
                     </div>
                     <div className="owner-actions">
@@ -364,28 +472,31 @@ const ListingDetailPage = () => {
               <div className="price-card">
                 <div className="price-header">
                   <span className="price-label">Стоимость аренды</span>
-                  <span className="price-value">{listing.price} ₽</span>
+                  <span className="price-value">{listing.price_per_day} ₽</span>
                 </div>
 
                 <div className="price-details">
                   <div className="price-row">
                     <span>1 день</span>
-                    <span>{listing.price} ₽</span>
+                    <span>{listing.price_per_day} ₽</span>
                   </div>
                   <div className="price-row">
                     <span>7 дней</span>
-                    <span>{Math.round(listing.price * 7 * 0.9)} ₽</span>
+                    <span>{Math.round(listing.price_per_day * 7 * 0.9)} ₽</span>
                   </div>
                   <div className="price-row">
                     <span>30 дней</span>
-                    <span>{Math.round(listing.price * 30 * 0.8)} ₽</span>
+                    <span>{Math.round(listing.price_per_day * 30 * 0.8)} ₽</span>
                   </div>
                 </div>
 
                 <div className="deposit-info">
                   <span className="deposit-label">Залог</span>
-                  <span className="deposit-amount">{listing.conditions.deposit}</span>
+                  <span className="deposit-amount">
+                    {listing.deposit ? `${listing.deposit} ₽` : 'Не требуется'}
+                  </span>
                 </div>
+                
                 <button
                   type="button"
                   className="btn btn-primary btn-block"
@@ -396,14 +507,17 @@ const ListingDetailPage = () => {
 
                 <button
                   type="button"
-                  className="btn btn-outline"
+                  className="btn btn-outline btn-block"
                   onClick={handleContact}
                 >
                   <FaPhone />
                   Связаться
                 </button>
 
-                <button className="btn btn-outline back-button" onClick={() => navigate(-1)}>
+                <button 
+                  className="btn btn-outline btn-block back-button" 
+                  onClick={() => navigate(-1)}
+                >
                   ← Назад
                 </button>
               </div>

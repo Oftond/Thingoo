@@ -9,12 +9,12 @@ class NotificationService {
     console.log(`📧 Отправка email на ${to}: ${subject}`);
     
     // Здесь будет реальная отправка через API
-    // const response = await api.post('/notifications/email', {
-    //   to,
-    //   subject,
-    //   template,
-    //   data
-    // });
+    const response = await api.post('/notifications/email', {
+      to,
+      subject,
+      template,
+      data
+    });
     
     return { success: true, messageId: Date.now() };
   }

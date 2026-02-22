@@ -1016,3 +1016,45 @@
     justify-content: center;
   }
 }
+
+/* Стили для плейсхолдера изображения */
+.listing-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  color: #999;
+}
+
+.placeholder-icon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.5;
+}
+
+.placeholder-text {
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.loading, .error {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px;
+  font-size: 1.2rem;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+}
+
+.loading {
+  color: #0a3d2c;
+}
+
+.error {
+  color: #dc2626;
+  background: #fee;
+}

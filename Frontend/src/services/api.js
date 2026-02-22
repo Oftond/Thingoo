@@ -73,7 +73,7 @@ export const itemsAPI = {
   create: (data) => api.post('/items', data),
   update: (id, data) => api.put(`/items/${id}`, data),
   delete: (id) => api.delete(`/items/${id}`),
-  getUserItems: (userId) => api.get(`/users/${userId}/items`),
+  getUserItems: (userId) => api.get(`/items/users/${userId}`),
   getFeedback: (id) => api.get(`/items/${id}/feedback`),
 };
 
@@ -94,7 +94,28 @@ export const mediaAPI = {
     }
   },
   getItemPhotos: (itemId) => api.get(`/media/items/${itemId}/photos`),
-  getPhoto: (photoId) => api.get(`/media/photos/${photoId}`, { responseType: 'blob' }),
+  // ВАЖНО: получаем фото как blob и создаем URL
+  getPhoto: async (photoId) => {
+    try {
+      const response = await api.get(`/media/photos/${photoId}`, { 
+        responseType: 'blob',
+        // Не добавляем Content-Type для blob запросов
+        headers: {}
+      });
+      
+      // Создаем URL из blob
+      const url = URL.createObjectURL(response.data);
+      return { url, blob: response.data };
+    } catch (error) {
+      console.error('Error getting photo:', error);
+      throw error;
+    }
+  },
+  
+  // Получаем фото напрямую через fetch (альтернативный метод)
+  getPhotoUrl: (photoId) => {
+    return `${API_BASE_URL}/media/photos/${photoId}`;
+  },
   deletePhoto: (photoId) => api.delete(`/media/photos/${photoId}`),
 };
 

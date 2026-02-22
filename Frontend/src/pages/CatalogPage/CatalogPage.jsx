@@ -1,181 +1,18 @@
 // src/pages/CatalogPage/CatalogPage.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { itemsAPI, mediaAPI } from '../../services/api';
 import './CatalogPage.css';
-
-const listings = [
-    {
-      id: 1,
-      title: 'Камера Sony Alpha 7 III с объективом',
-      category: 'electronics',
-      price_per_day: 1200,
-      rating: 4.8,
-      reviews: 24,
-      distance: 2.5,
-      hasInsurance: true,
-      hasFastDelivery: true,
-      image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-      userRating: 4.9,
-      isNew: true,
-    },
-    {
-      id: 2,
-      title: 'Горный велосипед Trek 29 дюймов',
-      category: 'sports',
-      price_per_day: 800,
-      rating: 4.7,
-      reviews: 18,
-      distance: 5.3,
-      hasInsurance: true,
-      hasFastDelivery: false,
-      image: 'https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-      userRating: 4.8,
-      isNew: false,
-    },
-    {
-      id: 3,
-      title: 'Дрель Bosch Professional GSB 18V',
-      category: 'tools',
-      price_per_day: 450,
-      rating: 4.9,
-      reviews: 32,
-      distance: 1.2,
-      hasInsurance: false,
-      hasFastDelivery: true,
-      image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-      userRating: 4.7,
-      isNew: true,
-    },
-    {
-      id: 4,
-      title: 'Палатка 4-местная с тамбуром',
-      category: 'sports',
-      price_per_day: 300,
-      rating: 4.6,
-      reviews: 15,
-      distance: 3.8,
-      hasInsurance: true,
-      hasFastDelivery: true,
-      image: 'https://images.unsplash.com/photo-1504851149312-7a075b496cc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-      userRating: 4.9,
-      isNew: false,
-    },
-    {
-      id: 5,
-      title: 'Ноутбук MacBook Pro 2023 14"',
-      category: 'electronics',
-      price_per_day: 1500,
-      rating: 4.8,
-      reviews: 28,
-      distance: 0.8,
-      hasInsurance: true,
-      hasFastDelivery: true,
-      image: 'https://images.unsplash.com/photo-1515343480029-43cdfe6b6aae?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-      userRating: 4.8,
-      isNew: true,
-    },
-    {
-      id: 6,
-      title: 'Гироскутер Xiaomi Mi Pro 2',
-      category: 'vehicles',
-      price_per_day: 600,
-      rating: 4.5,
-      reviews: 12,
-      distance: 2.1,
-      hasInsurance: false,
-      hasFastDelivery: true,
-      image: 'https://images.unsplash.com/photo-1571506872033-8f6a3c3c1785?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-      userRating: 4.6,
-      isNew: false,
-    },
-    {
-      id: 7,
-      title: 'Проектор Epson 4K для дома',
-      category: 'electronics',
-      price_per_day: 900,
-      rating: 4.7,
-      reviews: 21,
-      distance: 4.5,
-      hasInsurance: true,
-      hasFastDelivery: false,
-      image: 'https://images.unsplash.com/photo-1563981399209-5c6d83b43e7d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-      userRating: 4.7,
-      isNew: false,
-    },
-    {
-      id: 8,
-      title: 'Набор инструментов 150 предметов',
-      category: 'tools',
-      price_per_day: 350,
-      rating: 4.6,
-      reviews: 19,
-      distance: 1.7,
-      hasInsurance: true,
-      hasFastDelivery: true,
-      image: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-      userRating: 4.8,
-      isNew: true,
-    },
-    {
-      id: 9,
-      title: 'Электросамокат Ninebot Max',
-      category: 'vehicles',
-      price_per_day: 700,
-      rating: 4.3,
-      reviews: 8,
-      distance: 3.2,
-      hasInsurance: true,
-      hasFastDelivery: true,
-      image: 'https://images.unsplash.com/photo-1579445710183-f9a8161b2e7c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-      userRating: 4.5,
-      isNew: false,
-    },
-    {
-      id: 10,
-      title: 'Игровая консоль PlayStation 5',
-      category: 'electronics',
-      price_per_day: 1000,
-      rating: 4.9,
-      reviews: 42,
-      distance: 1.5,
-      hasInsurance: true,
-      hasFastDelivery: true,
-      image: 'https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-      userRating: 4.9,
-      isNew: true,
-    },
-    {
-      id: 11,
-      title: 'Гитара акустическая Yamaha',
-      category:'music',
-      price_per_day: 400,
-      rating: 4.4,
-      reviews: 11,
-      distance: 2.8,
-      hasInsurance: false,
-      hasFastDelivery: false,
-      image: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-      userRating: 4.6,
-      isNew: false,
-    },
-    {
-      id: 12,
-      title: 'Беговая дорожка электрическая',
-      category: 'sports',
-      price_per_day: 850,
-      rating: 4.2,
-      reviews: 7,
-      distance: 4.7,
-      hasInsurance: true,
-      hasFastDelivery: true,
-      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-      userRating: 4.3,
-      isNew: false,
-    },
-  ];
 
 const CatalogPage = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const [listings, setListings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [photoUrls, setPhotoUrls] = useState({});
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedRating, setSelectedRating] = useState('all');
   const [selectedSort, setSelectedSort] = useState('popular');
@@ -225,8 +62,74 @@ const CatalogPage = () => {
     { id: 'party', name: 'Для праздника', icon: '🎉', count: 45, color: '#118AB2' },
     { id: 'camping', name: 'Кемпинг', icon: '⛺', count: 78, color: '#EF476F' },
   ];
-  
 
+  // Функция для загрузки фото для конкретного item
+  const loadItemPhoto = useCallback(async (itemId) => {
+    try {
+      console.log(`Loading photos for item ${itemId}`);
+      const photosRes = await mediaAPI.getItemPhotos(itemId);
+      const photos = photosRes.data || [];
+      
+      if (photos.length > 0) {
+        // Берем первое фото (или главное, если есть)
+        const primaryPhoto = photos.find(p => p.is_primary) || photos[0];
+        
+        // Получаем URL фото через API метод
+        const photoUrl = mediaAPI.getPhotoUrl(primaryPhoto.id);
+        
+        console.log(`Photo URL for item ${itemId}:`, photoUrl);
+        
+        // Сохраняем URL в состоянии
+        setPhotoUrls(prev => ({
+          ...prev,
+          [itemId]: photoUrl
+        }));
+      } else {
+        console.log(`No photos for item ${itemId}`);
+      }
+    } catch (photoErr) {
+      console.warn(`Failed to load photos for item ${itemId}:`, photoErr);
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        setLoading(true);
+        const params = {};
+        if (user?.id) {
+          params.exclude_owner_id = user.id;
+        }
+        const response = await itemsAPI.getAll(params);
+        const items = response.data || [];
+        setListings(items);
+        
+        // Загружаем фото для каждого объявления
+        items.forEach(item => {
+          loadItemPhoto(item.id);
+        });
+        
+      } catch (err) {
+        console.error('Failed to load listings:', err);
+        setError('Не удалось загрузить объявления');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchListings();
+  }, [user?.id, loadItemPhoto]);
+
+  // Очищаем URL-объекты при размонтировании
+  useEffect(() => {
+    return () => {
+      Object.values(photoUrls).forEach(url => {
+        if (url && url.startsWith('blob:')) {
+          URL.revokeObjectURL(url);
+        }
+      });
+    };
+  }, [photoUrls]);
   
   const getCurrentCategory = () => {
     return categories.find(c => c.id === selectedCategory) || categories[0];
@@ -244,8 +147,8 @@ const CatalogPage = () => {
     .filter(listing => {
       const matchesCategory = selectedCategory === 'all' || listing.category === selectedCategory;
       const ratingFilter = getCurrentRating();
-      const matchesRating = ratingFilter.id === 'all' || listing.rating >= ratingFilter.min;
-      const matchesPrice = listing.price >= priceRange[0] && listing.price <= priceRange[1];
+      const matchesRating = ratingFilter.id === 'all' || (listing.rating || 0) >= ratingFilter.min;
+      const matchesPrice = listing.price_per_day >= priceRange[0] && listing.price_per_day <= priceRange[1];
       const matchesSearch = searchQuery === '' || 
         listing.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         categories.find(c => c.id === listing.category)?.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -255,17 +158,17 @@ const CatalogPage = () => {
     .sort((a, b) => {
       switch (selectedSort) {
         case 'rating':
-          return b.rating - a.rating;
+          return (b.rating || 0) - (a.rating || 0);
         case 'price-low':
-          return a.price - b.price;
+          return a.price_per_day - b.price_per_day;
         case 'price-high':
-          return b.price - a.price;
+          return b.price_per_day - a.price_per_day;
         case 'distance':
-          return a.distance - b.distance;
+          return (a.distance || 0) - (b.distance || 0);
         case 'newest':
           return (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0);
         default:
-          return (b.rating * b.reviews) - (a.rating * a.reviews);
+          return ((b.rating || 0) * (b.reviews || 0)) - ((a.rating || 0) * (a.reviews || 0));
       }
     });
 
@@ -295,6 +198,26 @@ const CatalogPage = () => {
   const goToListingDetail = (id) => {
     navigate(`/listing/${id}`);
   };
+
+  const handleImageError = (e, itemId) => {
+    console.log(`Image load error for item ${itemId}, using placeholder`);
+    e.target.onerror = null; // Предотвращаем бесконечный цикл
+    e.target.src = 'https://via.placeholder.com/300x200?text=No+Image';
+    // Удаляем URL из состояния, чтобы больше не пытаться загрузить
+    setPhotoUrls(prev => {
+      const newState = { ...prev };
+      delete newState[itemId];
+      return newState;
+    });
+  };
+
+  const getCategoryName = (categoryId) => {
+    return categories.find(c => c.id === categoryId)?.name || categoryId || 'Без категории';
+  };
+
+  const getCategoryIcon = (categoryId) => {
+    return categories.find(c => c.id === categoryId)?.icon || '📦';
+  };
   
   return (
     <div className="catalog-page" onClick={closeAllDropdowns}>
@@ -310,7 +233,10 @@ const CatalogPage = () => {
                 <strong>{new Set(filteredAndSortedListings.map(l => l.category)).size}</strong> категорий
               </span>
               <span className="stat-item">
-                Средний рейтинг: <strong>4.7</strong>
+                Средний рейтинг: <strong>
+                  {(filteredAndSortedListings.reduce((acc, item) => acc + (item.rating || 0), 0) / 
+                    (filteredAndSortedListings.length || 1)).toFixed(1)}
+                </strong>
               </span>
             </div>
           </div>
@@ -548,53 +474,94 @@ const CatalogPage = () => {
             </div>
 
             <div className="listings-grid">
-              {filteredAndSortedListings.length > 0 ? (
+              {loading ? (
+                <div className="loading">Загрузка...</div>
+              ) : error ? (
+                <div className="error">{error}</div>
+              ) : filteredAndSortedListings.length > 0 ? (
                 filteredAndSortedListings.map(listing => (
                   <div 
                     key={listing.id} 
-                    className="listing-card"
+                    className="listing-card" 
                     onClick={() => goToListingDetail(listing.id)}
                   >
                     <div className="listing-image">
-                      <img src={listing.image} alt={listing.title} />
+                      {photoUrls[listing.id] ? (
+                        <img 
+                          src={photoUrls[listing.id]} 
+                          alt={listing.title}
+                          onError={(e) => handleImageError(e, listing.id)}
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="listing-image-placeholder">
+                          <span className="placeholder-icon">{getCategoryIcon(listing.category)}</span>
+                          <span className="placeholder-text">Нет фото</span>
+                        </div>
+                      )}
+                      
                       <div className="listing-badges">
-                        {listing.hasInsurance && <span className="badge badge-insurance">💎 Страхование</span>}
-                        {listing.hasFastDelivery && <span className="badge badge-delivery">🚚 Быстрая доставка</span>}
-                        {listing.isNew && <span className="badge badge-new">🆕 Новое</span>}
+                        {listing.has_insurance && (
+                          <span className="badge badge-insurance">💎 Страхование</span>
+                        )}
+                        {listing.has_fast_delivery && (
+                          <span className="badge badge-delivery">🚚 Быстрая доставка</span>
+                        )}
+                        {listing.isNew && (
+                          <span className="badge badge-new">🆕 Новое</span>
+                        )}
                       </div>
-                      <button className="favorite-btn">❤️</button>
+                      <button 
+                        className="favorite-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // Добавить в избранное
+                        }}
+                      >
+                        ♥
+                      </button>
                     </div>
                     
                     <div className="listing-content">
                       <div className="listing-header">
                         <h3 className="listing-title">{listing.title}</h3>
-                        <div className="listing-price">{listing.price} ₽/день</div>
+                        <div className="listing-price">{listing.price_per_day} ₽/день</div>
                       </div>
                       
                       <div className="listing-category">
                         <span className="category-icon-small">
-                          {categories.find(c => c.id === listing.category)?.icon}
+                          {getCategoryIcon(listing.category)}
                         </span>
-                        <span>{categories.find(c => c.id === listing.category)?.name}</span>
+                        <span>{getCategoryName(listing.category)}</span>
                       </div>
                       
                       <div className="listing-info">
                         <div className="info-item rating-item">
                           <span className="info-icon">⭐</span>
-                          <span className="info-text">{listing.rating}</span>
-                          <span className="info-reviews">({listing.reviews})</span>
+                          <span className="info-text">{listing.rating || 'Нет'}</span>
+                          {listing.reviews > 0 && (
+                            <span className="info-reviews">({listing.reviews})</span>
+                          )}
                         </div>
                         <div className="info-item">
                           <span className="info-icon">📍</span>
-                          <span className="info-text">{listing.distance} км</span>
+                          <span className="info-text">{listing.location || 'Не указано'}</span>
                         </div>
                         <div className="info-item">
                           <span className="info-icon">👤</span>
-                          <span className="info-text">{listing.userRating}</span>
+                          <span className="info-text">{listing.userRating || '5.0'}</span>
                         </div>
                       </div>
                       
-                      <button className="btn btn-rent">Арендовать</button>
+                      <button 
+                        className="btn btn-rent"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/rent/${listing.id}`);
+                        }}
+                      >
+                        Арендовать
+                      </button>
                     </div>
                   </div>
                 ))
