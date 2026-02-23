@@ -6,10 +6,11 @@ import './PaymentPage.css';
 const PaymentSuccess = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { amount, itemName } = location.state || { 
-    amount: 0, 
-    itemName: 'товар' 
-  };
+  const state = location.state || {};
+  
+  const amount = typeof state.amount === 'number' ? state.amount : 0;
+  const itemName = typeof state.itemName === 'string' ? state.itemName : 'товар';
+  const paymentId = state.paymentId || null;
 
   return (
     <div className="payment-page">

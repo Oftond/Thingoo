@@ -12,7 +12,6 @@ router = APIRouter(prefix="/api/v1/media", tags=["Media"])
 @router.post("/items/{item_id}/photos")
 async def upload_item_photos(item_id: str, files: List[UploadFile] = File(...)):
     """Загрузить фото для предмета"""
-    print("!!!!!")
     uploaded_photos = []
     for file in files:
         if not file.content_type.startswith("image/"):

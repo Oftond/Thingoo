@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { itemsAPI, mediaAPI } from '../../services/api'; // Эти импорты теперь работают
+import { itemsAPI, mediaAPI } from '../../services/api';
 import { useToast } from '../../components/Toast/Toast';
 import './CreateListingPage.css';
 

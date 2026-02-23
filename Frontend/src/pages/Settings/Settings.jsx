@@ -1,8 +1,45 @@
 // src/pages/Settings/Settings.jsx
-import React from 'react';
+import React, { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../components/Toast/Toast';
+import ChangePasswordModal from '../../components/Auth/ChangePasswordModal';
 import './Settings.css';
 
 const Settings = () => {
+  const { user } = useAuth();
+  const { showToast } = useToast();
+  
+  const [language, setLanguage] = useState('ru');
+  const [notifications, setNotifications] = useState({
+    email: true,
+    push: true,
+    recommendations: false
+  });
+  
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  const handleNotificationChange = (type) => {
+    setNotifications(prev => ({
+      ...prev,
+      [type]: !prev[type]
+    }));
+  };
+
+  const handleSaveSettings = async () => {
+    setSaving(true);
+    
+    try {
+      // Здесь можно отправить настройки на бэкенд
+      showToast('Настройки успешно сохранены', 'success');
+    } catch (error) {
+      console.error('Failed to save settings:', error);
+      showToast('Ошибка при сохранении настроек', 'error');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <div className="page">
       <div className="container">
@@ -25,7 +62,11 @@ const Settings = () => {
                     Выберите язык интерфейса сервиса.
                   </span>
                 </div>
-                <select className="settings-select" defaultValue="ru">
+                <select 
+                  className="settings-select" 
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                >
                   <option value="ru">Русский</option>
                   <option value="en">English</option>
                 </select>
@@ -36,7 +77,11 @@ const Settings = () => {
               <h3 className="settings-section-title">Уведомления</h3>
 
               <label className="settings-checkbox">
-                <input type="checkbox" defaultChecked />
+                <input 
+                  type="checkbox" 
+                  checked={notifications.email}
+                  onChange={() => handleNotificationChange('email')}
+                />
                 <span className="checkbox-mark" />
                 <span className="settings-checkbox-text">
                   Уведомления по email
@@ -44,7 +89,11 @@ const Settings = () => {
               </label>
 
               <label className="settings-checkbox">
-                <input type="checkbox" defaultChecked />
+                <input 
+                  type="checkbox" 
+                  checked={notifications.push}
+                  onChange={() => handleNotificationChange('push')}
+                />
                 <span className="checkbox-mark" />
                 <span className="settings-checkbox-text">
                   Пуш-уведомления о новых сообщениях
@@ -52,7 +101,11 @@ const Settings = () => {
               </label>
 
               <label className="settings-checkbox">
-                <input type="checkbox" />
+                <input 
+                  type="checkbox" 
+                  checked={notifications.recommendations}
+                  onChange={() => handleNotificationChange('recommendations')}
+                />
                 <span className="checkbox-mark" />
                 <span className="settings-checkbox-text">
                   Подборки и рекомендации
@@ -61,7 +114,13 @@ const Settings = () => {
             </div>
 
             <div className="settings-actions">
-              <button className="btn btn-primary">Сохранить изменения</button>
+              <button 
+                className="btn btn-primary"
+                onClick={handleSaveSettings}
+                disabled={saving}
+              >
+                {saving ? 'Сохранение...' : 'Сохранить изменения'}
+              </button>
             </div>
           </div>
 
@@ -90,7 +149,10 @@ const Settings = () => {
                     Рекомендуем менять пароль раз в 3–6 месяцев.
                   </span>
                 </div>
-                <button className="btn btn-secondary btn-small">
+                <button 
+                  className="btn btn-secondary btn-small"
+                  onClick={() => setShowChangePasswordModal(true)}
+                >
                   Изменить
                 </button>
               </div>
@@ -114,6 +176,12 @@ const Settings = () => {
           </div>
         </div>
       </div>
+
+      {/* Модалка смены пароля */}
+      <ChangePasswordModal
+        isOpen={showChangePasswordModal}
+        onClose={() => setShowChangePasswordModal(false)}
+      />
     </div>
   );
 };

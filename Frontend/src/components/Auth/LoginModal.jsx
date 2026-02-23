@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../Toast/Toast";
+import ForgotPasswordModal from "./ForgotPasswordModal";
 import "./Modal.css";
 
 function LoginModal({ onClose, onSwitchToRegister }) {
@@ -9,23 +10,22 @@ function LoginModal({ onClose, onSwitchToRegister }) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   const { login } = useAuth();
   const { showToast } = useToast();
 
-  // src/components/Auth/LoginModal.jsx
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
     try {
-      const result = await login({ email, password }); // ← использует AuthContext.login
+      const result = await login({ email, password });
 
       if (result.success) {
         showToast('Успешный вход!', 'success');
         onClose();
-        // Не перезагружайте страницу — React сам обновит UI
       }
     } catch (err) {
       console.error('Login error:', err);
@@ -39,6 +39,30 @@ function LoginModal({ onClose, onSwitchToRegister }) {
       setLoading(false);
     }
   };
+
+  const handleForgotPasswordClick = (e) => {
+    e.preventDefault();
+    setShowForgotPassword(true);
+  };
+
+  const handleCloseForgotPassword = () => {
+    setShowForgotPassword(false);
+  };
+
+  const handleBackToLogin = () => {
+    setShowForgotPassword(false);
+  };
+
+  // Если открыта модалка восстановления пароля, показываем её
+  if (showForgotPassword) {
+    return (
+      <ForgotPasswordModal 
+        onClose={handleCloseForgotPassword}
+        onBackToLogin={handleBackToLogin}
+        initialEmail={email}
+      />
+    );
+  }
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
@@ -79,6 +103,18 @@ function LoginModal({ onClose, onSwitchToRegister }) {
               disabled={loading}
               placeholder="••••••••"
             />
+          </div>
+
+          {/* Ссылка на восстановление пароля */}
+          <div className="forgot-password-container">
+            <button 
+              type="button"
+              className="forgot-password-link"
+              onClick={handleForgotPasswordClick}
+              disabled={loading}
+            >
+              Забыли пароль?
+            </button>
           </div>
 
           <div className="modal-actions">

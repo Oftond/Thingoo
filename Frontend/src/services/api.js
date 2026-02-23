@@ -55,6 +55,7 @@ export const usersAPI = {
   getById: (id) => api.get(`/users/${id}`),
   update: (id, data) => api.put(`/users/${id}`, data),
   delete: (id) => api.delete(`/users/${id}`),
+  changePassword: (id, data) => api.post(`/users/${id}/change-password`, data),
 };
 
 // ===== АДМИНКА =====

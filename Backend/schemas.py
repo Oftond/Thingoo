@@ -41,23 +41,31 @@ class RentalRequestRead(RentalRequestBase):
 
 # ---------- Payments ----------
 class PaymentBase(BaseModel):
-    user_id: UUID
-    request_id: Optional[UUID] = Field(
-        default=None, description="ID заявки на аренду (если есть)"
-    )
-    amount: Decimal
+    item_id: UUID
+    renter_id: UUID
+    amount: float
+    method: str
+    rental_days: int
+    insurance: Decimal
+    delivery: Decimal
 
 class PaymentCreate(PaymentBase):
-    status: Optional[str] = Field(default="pending", description="Начальный статус")
+    pass
+
+class PaymentOut(PaymentBase):
+    id: UUID
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    
+    class Config:
+        orm_mode = True
 
 class PaymentRead(PaymentBase):
     id: UUID
-    status: Optional[str]
-    created_at: Optional[datetime]
+    created_at: Optional[datetime] = None
 
     class Config:
         from_attributes = True
-
 
 class PaymentStatus(BaseModel):
     id: UUID
@@ -152,3 +160,15 @@ class NotificationReadStatus(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    newPassword: str
+
+class ChangePasswordRequest(BaseModel):
+    current_password: str
+    new_password: str

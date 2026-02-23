@@ -1,18 +1,10 @@
-// src/pages/Payment/PaymentPage.jsx - ОБНОВЛЕННЫЙ
-import React, { useState } from 'react';
+// src/pages/Payment/PaymentPage.jsx
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { paymentsAPI, itemsAPI, usersAPI } from '../../services/api';
+import notificationService from '../../services/notificationService';
 import './PaymentPage.css';
-
-const paymentDetails = {
-    itemName: 'Sony Alpha 7 III',
-    ownerName: 'Алексей',
-    rentalDays: 3,
-    pricePerDay: 1200,
-    insurance: 500,
-    delivery: 300,
-    totalAmount: 1200 * 3 + 500 + 300,
-  };
 
 const PaymentPage = () => {
   const navigate = useNavigate();
@@ -22,37 +14,138 @@ const PaymentPage = () => {
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [agreed, setAgreed] = useState(false);
   const [processing, setProcessing] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
+  const [item, setItem] = useState(null);
+  const [owner, setOwner] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Загружаем информацию о товаре
+  useEffect(() => {
+    const fetchItemData = async () => {
+      try {
+        setLoading(true);
+        
+        // Получаем информацию о товаре
+        const itemResponse = await itemsAPI.getById(id);
+        const itemData = itemResponse.data;
+        setItem(itemData);
+        
+        // Получаем информацию о владельце
+        if (itemData && itemData.owner_id) {
+          const ownerResponse = await usersAPI.getById(itemData.owner_id);
+          setOwner(ownerResponse.data);
+        }
+        
+      } catch (error) {
+        console.error('Failed to load item:', error);
+        setError('Не удалось загрузить информацию о товаре');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchItemData();
+    }
+  }, [id]);
 
   const calculateTotal = () => {
-    return paymentDetails.totalAmount;
+    if (!item || !item.price_per_day) return 0;
+    const rentalDays = 3; // В реальном приложении берется из формы
+    const insurance = 500; // В реальном приложении из формы
+    const delivery = 300; // В реальном приложении из формы
+    return (item.price_per_day * rentalDays) + insurance + delivery;
   };
 
   const handlePayment = async (e) => {
     e.preventDefault();
     
     if (!agreed) {
-      alert('Пожалуйста, согласитесь с условиями оплаты');
+      setError('Пожалуйста, согласитесь с условиями оплаты');
+      return;
+    }
+
+    if (!user) {
+      setError('Необходимо войти в систему');
+      return;
+    }
+
+    if (!item || !owner) {
+      setError('Информация о товаре не загружена');
       return;
     }
 
     setProcessing(true);
+    setError('');
 
-    // Имитация обработки платежа
-    setTimeout(() => {
+    try {
+      // Создаем платеж на бэкенде
+      const paymentResponse = await paymentsAPI.create({
+        item_id: id,
+        renter_id: user.id,
+        amount: calculateTotal(),
+        method: paymentMethod,
+        rental_days: 3, // В реальном приложении из формы
+        insurance: 500, // В реальном приложении из формы
+        delivery: 300 // В реальном приложении из формы
+      });
+
+      console.log('Payment created:', paymentResponse.data);
+
+      // Отправляем email арендатору о создании платежа
+      if (user && user.email) {
+        await notificationService.sendPaymentSuccessNotification(
+          user,
+          calculateTotal(),
+          item
+        ).catch(err => console.warn('Payment email failed:', err));
+      }
+
+      // Отправляем email владельцу о новом запросе аренды
+      if (owner && owner.email) {
+        await notificationService.sendNewRentalNotification(
+          owner,
+          user,
+          item
+        ).catch(err => console.warn('Owner notification failed:', err));
+      }
+
+      // Переходим на страницу успеха
+      navigate('/payment/success', { 
+        state: { 
+          amount: calculateTotal(),
+          itemName: item.title || 'товар',
+          paymentId: paymentResponse.data.id
+        } 
+      });
+
+    } catch (error) {
+      console.error('Payment failed:', error);
+      if (error.response) {
+        console.error('Error response:', error.response.data);
+        // Проверяем, не является ли ошибка объектом
+        const errorMsg = error.response.data?.detail;
+        setError(typeof errorMsg === 'string' ? errorMsg : 'Ошибка при обработке платежа');
+      } else {
+        setError('Ошибка при обработке платежа. Попробуйте снова.');
+      }
+    } finally {
       setProcessing(false);
-      setSuccess(true);
-      
-      setTimeout(() => {
-        navigate('/payment/success', { 
-          state: { 
-            amount: calculateTotal(),
-            itemName: paymentDetails.itemName 
-          } 
-        });
-      }, 2000);
-    }, 2000);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="payment-page">
+        <div className="container">
+          <div className="loading-spinner">
+            <div className="spinner"></div>
+            <p>Загрузка...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!user) {
     return (
@@ -61,8 +154,8 @@ const PaymentPage = () => {
           <div className="payment-not-authorized">
             <h2>Необходима авторизация</h2>
             <p>Пожалуйста, войдите в систему для оплаты</p>
-            <button className="btn btn-primary" onClick={() => navigate('/')}>
-              На главную
+            <button className="btn btn-primary" onClick={() => navigate('/login')}>
+              Войти
             </button>
           </div>
         </div>
@@ -70,20 +163,15 @@ const PaymentPage = () => {
     );
   }
 
-  if (success) {
+  if (!item) {
     return (
       <div className="payment-page">
         <div className="container">
-          <div className="payment-success">
-            <div className="success-icon">✓</div>
-            <h2>Оплата прошла успешно!</h2>
-            <p>Спасибо за оплату. Мы обрабатываем ваш заказ.</p>
-            <div className="payment-details">
-              <p>Сумма: {calculateTotal()} ₽</p>
-              <p>Товар: {paymentDetails.itemName}</p>
-            </div>
-            <button className="btn btn-primary" onClick={() => navigate('/my-listings')}>
-              Перейти к моим арендам
+          <div className="payment-not-authorized">
+            <h2>Товар не найден</h2>
+            <p>Запрошенный товар не существует или был удален</p>
+            <button className="btn btn-primary" onClick={() => navigate('/catalog')}>
+              В каталог
             </button>
           </div>
         </div>
@@ -98,6 +186,8 @@ const PaymentPage = () => {
           <h1 className="payment-title">Оплата аренды</h1>
           <p className="payment-subtitle">Заполните данные для оплаты</p>
         </div>
+
+        {error && <div className="payment-error">{error}</div>}
 
         <div className="payment-grid">
           {/* Левая колонка - форма оплаты */}
@@ -131,7 +221,7 @@ const PaymentPage = () => {
             </div>
 
             {paymentMethod === 'card' && (
-              <form onSubmit={handlePayment} className="payment-form">
+              <div className="payment-form">
                 <div className="form-group">
                   <label>Номер карты</label>
                   <input
@@ -176,7 +266,7 @@ const PaymentPage = () => {
                     defaultValue="IVAN PETROV"
                   />
                 </div>
-              </form>
+              </div>
             )}
 
             {paymentMethod === 'sbp' && (
@@ -184,7 +274,7 @@ const PaymentPage = () => {
                 <p>Оплата через Систему Быстрых Платежей</p>
                 <div className="sbp-qr">
                   <div className="qr-placeholder">
-                    <span>📱</span>
+                    <span className="qr-icon">📱</span>
                     <p>QR-код для оплаты</p>
                     <small>(в демо-режиме)</small>
                   </div>
@@ -225,25 +315,25 @@ const PaymentPage = () => {
             
             <div className="order-item">
               <div className="item-info">
-                <h3>{paymentDetails.itemName}</h3>
-                <p className="item-owner">Владелец: {paymentDetails.ownerName}</p>
+                <h3>{item?.title || 'Товар'}</h3>
+                <p className="item-owner">Владелец: {owner?.full_name || 'Неизвестно'}</p>
               </div>
             </div>
 
             <div className="order-details">
               <div className="detail-row">
-                <span>Аренда ({paymentDetails.rentalDays} дней)</span>
-                <span>{paymentDetails.pricePerDay * paymentDetails.rentalDays} ₽</span>
+                <span>Аренда (3 дней)</span>
+                <span>{item?.price_per_day ? item.price_per_day * 3 : 0} ₽</span>
               </div>
               
               <div className="detail-row">
                 <span>Страховка</span>
-                <span>{paymentDetails.insurance} ₽</span>
+                <span>500 ₽</span>
               </div>
               
               <div className="detail-row">
                 <span>Доставка</span>
-                <span>{paymentDetails.delivery} ₽</span>
+                <span>300 ₽</span>
               </div>
             </div>
 

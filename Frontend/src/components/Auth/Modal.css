@@ -201,3 +201,147 @@
     font-size: 22px;
   }
 }
+
+/* Добавьте в конец файла Modal.css */
+
+.forgot-password-container {
+  text-align: right;
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
+
+.forgot-password-link {
+  background: none;
+  border: none;
+  color: #0a3d2c;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 5px;
+}
+
+.forgot-password-link:hover {
+  color: #0f4d38;
+}
+
+.forgot-password-link:disabled {
+  color: #999;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+.success-container {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.success-icon {
+  width: 60px;
+  height: 60px;
+  background: #0a3d2c;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  margin: 0 auto 20px;
+}
+
+.success-message {
+  color: #4a5568;
+  margin: 20px 0;
+  line-height: 1.6;
+}
+
+.success-message strong {
+  color: #0a3d2c;
+}
+
+.modal-secondary-btn {
+  padding: 10px 20px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  color: #4a5568;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modal-secondary-btn:hover {
+  background: #f7fafc;
+  border-color: #cbd5e0;
+}
+
+.modal-secondary-btn:disabled {
+  background: #f7fafc;
+  color: #a0aec0;
+  cursor: not-allowed;
+}
+
+/* Добавьте в Modal.css */
+
+.password-strength {
+  margin-top: 8px;
+}
+
+.strength-bar {
+  height: 4px;
+  background-color: #e2e8f0;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.strength-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.strength-text {
+  font-size: 12px;
+}
+
+.password-requirements {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.password-requirements h4 {
+  margin: 0 0 8px 0;
+  color: #1a2639;
+  font-size: 14px;
+}
+
+.password-requirements ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.password-requirements li {
+  color: #a0aec0;
+  margin-bottom: 4px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.password-requirements li::before {
+  content: '○';
+  position: absolute;
+  left: 0;
+  color: #cbd5e0;
+}
+
+.password-requirements li.valid {
+  color: #10b981;
+}
+
+.password-requirements li.valid::before {
+  content: '✓';
+  color: #10b981;
+}

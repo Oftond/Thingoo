@@ -22,6 +22,8 @@ import MyListings from './pages/MyListings/MyListings';
 import Profile from './pages/Profile/Profile';
 import Settings from './pages/Settings/Settings';
 
+import ResetPasswordPage from './pages/ResetPassword/ResetPasswordPage'
+
 import PaymentPage from './pages/Payment/PaymentPage';
 import PaymentSuccess from './pages/Payment/PaymentSuccess';
 
@@ -55,6 +57,7 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               
+              <Route path="/reset-password" element={<ResetPasswordPage />} />
               <Route path="catalog" element={<CatalogPage />} />
               <Route path="listing/:id" element={<ListingDetailPage />} />
               <Route path="help" element={<Help />} />
